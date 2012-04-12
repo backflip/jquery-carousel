@@ -49,10 +49,6 @@ h3 {
 	width: 2em;
 }
 
-/*.js .example {
-	display: none;
-}*/
-
 .carousel {
 	border: 1px solid #ddd;
 	margin-bottom: 1.5em;
@@ -68,7 +64,7 @@ h3 {
 	background: #404139;
 	border: 1px solid #ccc;
 	color: #75715E;
-	height: 20em;
+	height: 10em;
 	margin: 0 0 1em 0;
 	overflow: auto;
 	-webkit-overflow-scrolling: touch;
@@ -98,6 +94,7 @@ h3 {
 	}
 	.code pre {
 		margin: 0;
+		height: 20em;
 	}
 }
 

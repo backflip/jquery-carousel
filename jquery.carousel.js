@@ -246,6 +246,8 @@
 		},
 				
 		update: function(options){
+			var self = this;
+			
 			$.extend(true, this.settings, options);
 			
 			this.$dom.slides = this.$dom.slides.parent().children();
@@ -273,6 +275,8 @@
 				this.$dom.handlesContainer.html(this._getHandles());
 				this.$dom.handles = this.$dom.handlesContainer.children();
 			}
+			
+			this.state.enabled = false;
 
 			this.resize();
 			this.enable();
@@ -309,6 +313,7 @@
 			}
 			
 			if (this.settings.elements.prevNext) {
+				this.$dom.nav.off(events);
 				this.$dom.nav.on(events, function(event){
 					var $this = $(this),
 						isDisabled = $this.hasClass('state-disabled'),
@@ -317,7 +322,7 @@
 					if (isDisabled) {
 						return;
 					}
-					
+
 					dir = $this.is(self.$dom.next) ? 1 : -1;
 					target = dir * self.settings.animation.step + self.props.current;
 					
@@ -330,6 +335,7 @@
 			}
 			
 			if (this.settings.elements.handles) {
+				this.$dom.handles.off(events);
 				this.$dom.handles.on(events, function(event){
 					var $this = $(this),
 						handleIndex = $this.index(),
@@ -343,10 +349,12 @@
 			}
 			
 			if (this.settings.touch.enabled && support.touch) {
+				this._touchDisable();
 				this._touchEnable();
 			}
 			
 			if (this.settings.behavior.keyboardNav) {
+				this.$dom.container.off(utils.getNamespacedEvents('keydown'));
 				this.$dom.container.on(utils.getNamespacedEvents('keydown'), $.proxy(function(event){
 					var $target = $(event.target),
 						nodeName = $target.get(0).nodeName.toLowerCase(),
@@ -355,7 +363,7 @@
 
 					if (!(isFormElement || event.metaKey || event.ctrlKey)) {
 						var code = event.keyCode || event.which,
-							target;
+							targetIndex, slideIndex;
 
 						// [left arrow] or [p]
 						if ($.inArray(code, [37, 80]) !== -1) {
@@ -371,9 +379,15 @@
 							
 						// number keys
 						} else if (47 < code && code < 58) {
-							target = code - 49;
-							this.goTo(target);
-							this.$dom.handles.eq(target).focus();
+							targetIndex = code - 49;
+							slideIndex = self._getSlideIndex(targetIndex);
+							
+							this.goTo(slideIndex);
+							
+							if (this.settings.elements.handles) {
+								this.$dom.handles.eq(targetIndex).focus();
+							}
+							
 							success = true;
 						}
 					}

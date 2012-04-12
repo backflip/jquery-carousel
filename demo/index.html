@@ -349,7 +349,7 @@
 	</ol>
 	
 		
-	<h2>Navigation</h2>
+	<h2>Navigational elements, behavior</h2>
 	
 	<ol class="examples">
 		<li>
@@ -563,6 +563,119 @@
 </div>
 	
 		</li>
+		<li>
+	
+<h3>Vertical slider</h3>
+
+<div class="example" id="example-06">
+	<div class="carousel"></div>
+	
+	<div class="code">
+		<div class="html">
+			<h3>HTML</h3>
+			
+			<pre><code>&lt;ul class="carousel" id="carousel-06"&gt;
+	&lt;li&gt;1&lt;/li&gt;
+	&lt;li&gt;2&lt;/li&gt;
+	&lt;li&gt;3&lt;br /&gt;Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.&lt;/li&gt;
+	&lt;li&gt;4&lt;/li&gt;
+	&lt;li&gt;5&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+		</div>
+
+		<div class="js">
+			<h3>JavaScript</h3>
+			
+			<pre class="prettyprint"><code>$('#carousel-06').carousel({
+	behavior: {
+		horizontal: false
+	},
+	visibleSlides: 3			
+});</code></pre>
+		</div>
+
+		<div class="css">
+			<h3>CSS</h3>
+			
+			<pre><code class="lang-css">.carousel-frame {
+	border: 1px solid #999;
+	overflow: hidden;
+	position: relative;
+}
+
+.carousel-slider {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	/* Trigger hardware acceleration */
+		   -moz-transform: translateZ(0);
+		    -ms-transform: translateZ(0);
+		     -o-transform: translateZ(0);
+		-webkit-transform: translateZ(0);
+	transform:             translateZ(0);
+}
+.carousel-slide {
+	float: left;
+	margin: 0;
+	padding: 0;
+}
+
+/* Prev / next navigation */
+.carousel-nav {
+	margin: 0.5em 0;
+	zoom: 1;
+}
+.carousel-nav:before,
+.carousel-nav:after {
+	content: "";
+	display: table;
+}
+.carousel-nav:after {
+	clear: both;
+}
+.carousel-nav span {
+	cursor: pointer;
+	float: left;
+}
+.carousel-nav .carousel-next {
+	float: right;
+}
+.carousel-nav .state-disabled {
+	color: #999;
+	cursor: default;
+	outline: none;
+}
+
+/* Counter ("slide x of y") */
+.carousel-counter {
+	margin: 0.5em 0;
+}
+
+/* Handles */
+.carousel-handles {
+	margin: 0.5em 0;
+	text-align: center;
+}
+.carousel-handles span {
+	cursor: pointer;
+	margin: 0 0.5em;
+}
+.carousel-handles .state-disabled {
+	color: #999;
+	cursor: default;
+	outline: none;
+}
+.carousel-handles .state-current {
+	color: #c30;
+	cursor: default;
+	outline: none;
+}</code></pre>
+		</div>
+	</div>
+</div>
+	
+		</li>
 	</ol>
 		
 	
@@ -573,14 +686,14 @@
 		
 <h3>Custom prev / next buttons</h3>
 
-<div class="example" id="example-06">
+<div class="example" id="example-07">
 	<div class="carousel"></div>
 	
 	<div class="code">
 		<div class="html">
 			<h3>HTML</h3>
 			
-			<pre><code>&lt;ul class="carousel" id="carousel-06"&gt;
+			<pre><code>&lt;ul class="carousel" id="carousel-07"&gt;
 	&lt;li&gt;1&lt;/li&gt;
 	&lt;li&gt;2&lt;/li&gt;
 	&lt;li&gt;3&lt;br /&gt;Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.&lt;/li&gt;
@@ -596,7 +709,7 @@
 			<h3>JavaScript</h3>
 			
 			<pre class="prettyprint"><code>// Init carousel
-$('#carousel-06').carousel({
+$('#carousel-07').carousel({
 	elements: {
 		prevNext: false,
 		handles: false,
@@ -606,14 +719,14 @@ $('#carousel-06').carousel({
 
 // Bind event on custom buttons
 $('#prev').on('click', function(){
-	$('#carousel-06').carousel('prev');
+	$('#carousel-07').carousel('prev');
 });
 $('#next').on('click', function(){
-	$('#carousel-06').carousel('next');
+	$('#carousel-07').carousel('next');
 });
 
 // Alternative
-/*var carousel = new Carousel($('#carousel-06'), {
+/*var carousel = new Carousel($('#carousel-07'), {
 	elements: {
 		prevNext: false,
 		handles: false,
@@ -666,14 +779,14 @@ $('#next').on('click', function(){
 		
 <h3>Update settings</h3>
 
-<div class="example" id="example-07">
+<div class="example" id="example-08">
 	<div class="carousel"></div>
 	
 	<div class="code">
 		<div class="html">
 			<h3>HTML</h3>
 			
-			<pre><code>&lt;ul class="carousel" id="carousel-07"&gt;
+			<pre><code>&lt;ul class="carousel" id="carousel-08"&gt;
 	&lt;li&gt;1&lt;/li&gt;
 	&lt;li&gt;2&lt;/li&gt;
 	&lt;li&gt;3&lt;br /&gt;Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.&lt;/li&gt;
@@ -686,7 +799,7 @@ $('#next').on('click', function(){
 			<h3>JavaScript</h3>
 			
 			<pre class="prettyprint"><code>// Init carousel
-var carousel = new Carousel($('#carousel-07'));
+var carousel = new Carousel($('#carousel-08'));
 carousel.init();
 
 // Clone third slide
@@ -793,14 +906,14 @@ carousel.update({
 		
 <h3>Destroy</h3>
 
-<div class="example" id="example-07">
+<div class="example" id="example-09">
 	<div class="carousel"></div>
 	
 	<div class="code">
 		<div class="html">
 			<h3>HTML</h3>
 			
-			<pre><code>&lt;ul class="carousel" id="carousel-08"&gt;
+			<pre><code>&lt;ul class="carousel" id="carousel-09"&gt;
 	&lt;li&gt;1&lt;/li&gt;
 	&lt;li&gt;2&lt;/li&gt;
 	&lt;li&gt;3&lt;br /&gt;Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.&lt;/li&gt;
@@ -813,7 +926,7 @@ carousel.update({
 			<h3>JavaScript</h3>
 			
 			<pre class="prettyprint"><code>// Init carousel
-var carousel = new Carousel($('#carousel-08'));
+var carousel = new Carousel($('#carousel-09'));
 carousel.init();
 
 // Destroy
@@ -912,7 +1025,7 @@ carousel.destroy();</code></pre>
 <script src="google-code-prettify/prettify.js"></script>
 <script src="google-code-prettify/lang-css.js"></script>
 
-<script src="../jquery.carousel.js"></script>
+<script src="../jquery.carousel.min.js"></script>
 
 <script>
 // http://yuiblog.com/blog/2007/06/07/style/

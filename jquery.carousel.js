@@ -501,7 +501,8 @@
 			this.state.enabled = false;
 			this.props.current = 0;
 			
-			$(window).off('resize.' + namespace);
+			// TODO: what happens with more than one slider on page?
+			//$(window).off('resize.' + namespace);
 		},
 		
 		
@@ -756,7 +757,7 @@
 				hasMoved = false;
 			};
 			events['touchmove.'+namespace] = function(e) {
-				// TODO: Throttle
+				// TODO: Debounce
 			
 				var event = e.originalEvent.targetTouches[0],
 					distance = 0,

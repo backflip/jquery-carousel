@@ -17,13 +17,16 @@ See demos on http://backflip.github.com/jquery-carousel
 
 * Include some basic styling
 * Include jQuery and the script
-* Initialize carousel with 
+* Initialize carousel:
+ 
 ```js
 <script>
 $('#carousel').carousel(options);
 </script>
 ``` 
+
 or 
+
 ```js
 <script>
 var carousel = new Carousel($('#carousel'), options);

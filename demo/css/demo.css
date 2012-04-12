@@ -38,7 +38,11 @@ h3 {
 .examples h3:before {
 	background: #eee;
 	border: 0.1em solid #ddd;
-	border-radius: 100%;
+		   -moz-border-radius: 1em;
+		    -ms-border-radius: 1em;
+		     -o-border-radius: 1em;
+		-webkit-border-radius: 1em;
+	border-radius:             1em;
 	content: counter(example);
 	line-height: 2;
 	position: absolute;

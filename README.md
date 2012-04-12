@@ -34,7 +34,7 @@ See demos on http://backflip.github.com/jquery-carousel
 ## Defaults
 
 ```js
-defaults: {
+{
 	animation: {
 		duration: 300,    // milliseconds
 		step: 1           // number of slides per animation (might be lower than number of visible slides)

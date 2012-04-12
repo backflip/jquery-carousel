@@ -1,5 +1,5 @@
 <!doctype html public>
-<html class="no-js">
+<html>
 <head>
 	<meta charset="utf-8" />
 	<title>jQuery Carousel Demo</title>
@@ -1043,21 +1043,30 @@ function addCss(cssCode) {
 	document.getElementsByTagName("head")[0].appendChild(styleElement);
 }
 
+// Loop through examples and eval stuff
 $('.example').each(function(i){
 	var $this = $(this),
+		
 		id = $this.attr('id'),
 		idRegExp = new RegExp(' #' + id, 'g'),
+		
 		html = $this.find('.html code').text(),
 		js = $this.find('.js code').text(),
 		css = $this.find('.css code').text().replace(/\.carousel/g, '#' + id + ' .carousel').replace(idRegExp, '');
 	
+	// Add HTML
 	$this.find('.carousel').html(html);
+	
+	// Add style block
 	addCss(css);
+	
+	// Eval JS
 	setTimeout(function(){
 		eval(js);
 	}, 100);
 });
 
+// Prettify code blocks
 prettyPrint();
 </script>
 

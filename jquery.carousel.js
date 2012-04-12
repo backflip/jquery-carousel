@@ -1,3 +1,4 @@
+/*! jQuery Carousel Plugin by Thomas Jaggi (2012) - http://github.com/backflip/jquery-carousel/ */
 ;(function(window, document, $, undefined){
 	"use strict";
 

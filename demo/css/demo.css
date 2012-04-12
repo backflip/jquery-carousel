@@ -100,7 +100,7 @@ h3 {
 	}
 }
 
-button {
+/*button {
 	background: #EF6806;
 		background-image:    -moz-linear-gradient(#EF6806, #D54601);
 		background-image:     -ms-linear-gradient(#EF6806, #D54601);
@@ -125,4 +125,4 @@ button[disabled] {
 button.enable,
 button.destroy {
 	margin-left: 2em;
-}
+}*/

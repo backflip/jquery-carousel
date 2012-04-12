@@ -100,7 +100,7 @@
 			
 			this.props = {
 				current: 0,
-				total: this.$dom.slides.length,
+				total: 0,
 				visible: 0
 			};
 
@@ -135,6 +135,7 @@
 				start: false,     // function(currentSlideIndex){ … }
 				stop: false       // function(currentSlideIndex){ … }
 			},
+			initialSlide: 0,  // which slide to show on init
 			text: {           // content of navigational elements
 				next:    'show next slide',
 				prev:    'show previous slide',
@@ -200,10 +201,9 @@
 				$dom.counter.appendTo($dom.container);
 			}
 			
-			// Add handle for each slide
+			// Add handle container
 			if (this.settings.elements.handles) {
-				$dom.handlesContainer.appendTo($dom.container).html(this._getHandles());
-				$dom.handles = $dom.handlesContainer.children();
+				$dom.handlesContainer.appendTo($dom.container);
 			}
 
 			// Init slides
@@ -219,28 +219,7 @@
 				$dom.container.addClass(namespace + '-vertical');
 			}
 			
-			// Calculate number of visible slides based on initial dimensions of elements
-			if (this.settings.visibleSlides) {
-				this.props.visible = this.settings.visibleSlides;
-			} else {
-				var minSize = 0,
-					containerSize = this.settings.behavior.horizontal ? this.$dom.frame.width() : this.$dom.frame.height();
-				
-				this.$dom.slides.each(function(){
-					var size = self.settings.behavior.horizontal ? $(this).width() : $(this).height();
-					
-					if (size > minSize) {
-						minSize = size;
-					}
-				});
-				this.props.visible = Math.round(containerSize/minSize);
-			}
-			
-			// Fit slides to container
-			this.resize();
-			
-			// Enable navigational elements
-			this.enable();
+			this.update();
 			
 			// Re-calculate dimensions on window resize
 			$(window).on(utils.getNamespacedEvents('resize'), $.proxy(function(){
@@ -257,6 +236,39 @@
 			$dom.slider.data(namespace, this);
 		
 			return this;
+		},
+				
+		update: function(options){
+			$.extend(true, this.settings, options);
+			
+			this.$dom.slides = this.$dom.slides.parent().children();
+			this.props.total = this.$dom.slides.length;
+			
+			this.props.current = this.settings.initialSlide;
+			
+			if (this.settings.visibleSlides > 0) {
+				this.props.visible = this.settings.visibleSlides;
+			} else {
+				var minSize = 0,
+					containerSize = this.settings.behavior.horizontal ? this.$dom.frame.width() : this.$dom.frame.height();
+				
+				this.$dom.slides.each(function(){
+					var size = self.settings.behavior.horizontal ? $(this).width() : $(this).height();
+					
+					if (size > minSize) {
+						minSize = size;
+					}
+				});
+				this.props.visible = Math.round(containerSize/minSize);
+			}
+			
+			if (this.settings.elements.handles) {
+				this.$dom.handlesContainer.html(this._getHandles());
+				this.$dom.handles = this.$dom.handlesContainer.children();
+			}
+
+			this.resize();
+			this.enable();
 		},
 	
 		resize: function(){
@@ -281,62 +293,7 @@
 			// Jump to initial position
 			this.goTo(this.props.current, true);
 		},
-		
-		goTo: function(i, skipAnimation){
-			var self = this,
-				index = this._getValidatedTarget(i),
-				cssPosition = this._getTargetPosition(index),
-				duration = skipAnimation ? 0 : this.settings.animation.duration,
-				callback = function(){
-					if (self.settings.events.stop) {
-						self.settings.events.stop(index);
-					}
-					self.state.animating = false;
-				},
-				prop, transitionProp, endEvent, transition, oldTransition;
-						
-			if (!skipAnimation) {
-				this.state.animating = true;
-				if (this.settings.events.start) {
-					this.settings.events.start(index);
-				}
 				
-				if (!support.transition) {
-					this.$dom.slider.animate(cssPosition, duration, function(){
-						callback();
-					});
-				} else {
-					prop = support.transition;
-					transitionProp = this.settings.behavior.horizontal ? 'left' : 'top';
-					endEvent = utils.getNamespacedEvents(utils.getTransitionEndEvent());
-					oldTransition = this.$dom.slider.css(prop);
-					transition = transitionProp + ' ' + duration/1000 + 's ease-in-out';
-					
-					this.$dom.slider.css(prop, transition);
-					this.$dom.slider.css(cssPosition);
-	
-					this.$dom.slider.on(endEvent, function(){
-						self.$dom.slider.off(endEvent);
-						self.$dom.slider.css(prop, oldTransition);
-						
-						callback();
-					});
-				}
-			} else {
-				this.$dom.slider.css(cssPosition);
-			}
-			
-			this.props.current = index;
-			
-			this._updateNav();
-		},
-		next: function(){
-			this.goTo(this.props.current+1);
-		},
-		prev: function(){
-			this.goTo(this.props.current-1);
-		},
-		
 		enable: function(){		
 			var self = this;
 			
@@ -462,10 +419,59 @@
 			this._updateNav();
 		},
 		
-		update: function(options){
-			$.extend(this.settings, options);
+		goTo: function(i, skipAnimation){
+			var self = this,
+				index = this._getValidatedTarget(i),
+				cssPosition = this._getTargetPosition(index),
+				duration = skipAnimation ? 0 : this.settings.animation.duration,
+				callback = function(){
+					if (self.settings.events.stop) {
+						self.settings.events.stop(index);
+					}
+					self.state.animating = false;
+				},
+				prop, transitionProp, endEvent, transition, oldTransition;
+						
+			if (!skipAnimation) {
+				this.state.animating = true;
+				if (this.settings.events.start) {
+					this.settings.events.start(index);
+				}
+				
+				if (!support.transition) {
+					this.$dom.slider.animate(cssPosition, duration, function(){
+						callback();
+					});
+				} else {
+					prop = support.transition;
+					transitionProp = this.settings.behavior.horizontal ? 'left' : 'top';
+					endEvent = utils.getNamespacedEvents(utils.getTransitionEndEvent());
+					oldTransition = this.$dom.slider.css(prop);
+					transition = transitionProp + ' ' + duration/1000 + 's ease-in-out';
+					
+					this.$dom.slider.css(prop, transition);
+					this.$dom.slider.css(cssPosition);
+	
+					this.$dom.slider.on(endEvent, function(){
+						self.$dom.slider.off(endEvent);
+						self.$dom.slider.css(prop, oldTransition);
+						
+						callback();
+					});
+				}
+			} else {
+				this.$dom.slider.css(cssPosition);
+			}
 			
-			this.resize();
+			this.props.current = index;
+			
+			this._updateNav();
+		},
+		next: function(){
+			this.goTo(this.props.current+1);
+		},
+		prev: function(){
+			this.goTo(this.props.current-1);
 		},
 		
 		destroy: function(){
@@ -478,8 +484,8 @@
 				.removeData(namespace + '-css')
 				.insertAfter($dom.container)
 				.css(sliderStyles);
-
-			$dom.slider
+				
+			$dom.slides
 				.removeClass(namespace + '-slide')
 				.removeData(namespace + '-index')
 				.each(function(){

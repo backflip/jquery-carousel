@@ -20,18 +20,14 @@ See demos on http://backflip.github.com/jquery-carousel
 * Initialize carousel:
  
 ```js
-<script>
 $('#carousel').carousel(options);
-</script>
 ``` 
 
 or 
 
 ```js
-<script>
 var carousel = new Carousel($('#carousel'), options);
 carousel.init();
-</script>
 ```
 
 ## Methods

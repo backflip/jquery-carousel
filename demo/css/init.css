@@ -1,0 +1,128 @@
+body {
+	color: #333;
+	font: 75% sans-serif;
+	padding: 1em;
+}
+
+h1 {
+	font-size: 2.5em;
+}
+h2 {
+	font-size: 2em;
+}
+h3 {
+	font-size: 1.3em;
+	margin: 0 0 0.5em 0;
+	padding: 0.5em 0;
+}
+
+.wrapper {
+	margin: 0 auto;
+	max-width: 90em;
+}
+
+.desc {
+	
+}
+.examples {
+	counter-reset: example;
+	list-style: none;
+	margin: 0 0 5em 0;
+	padding: 0;
+}
+.examples > li { 
+	counter-increment: example;
+	margin-bottom: 3em;
+	position: relative;
+}
+.examples h3:before {
+	background: #eee;
+	border: 0.1em solid #ddd;
+	border-radius: 100%;
+	content: counter(example);
+	line-height: 2;
+	position: absolute;
+	left: -3em;
+	text-align: center;
+	top: -0.1em;
+	width: 2em;
+}
+
+/*.js .example {
+	display: none;
+}*/
+
+.carousel {
+	border: 1px solid #ddd;
+	margin-bottom: 1.5em;
+	padding: 1em;
+}
+
+.code {
+	background: #efefef;
+	border: 1px solid #ddd;
+	padding: 1em;
+}
+.code pre {
+	background: #404139;
+	border: 1px solid #ccc;
+	color: #75715E;
+	height: 20em;
+	margin: 0 0 1em 0;
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+	padding: 0.75em;
+	       -moz-tab-size: 4;
+	         -o-tab-size: 4;
+		-webkit-tab-size: 4; /* Please */
+    tab-size:             4;
+}
+.code pre.prettyprint {
+	background: #272822;
+}
+.code code {
+	font-size: 1.3em;
+}
+
+@media (min-width: 50em) {
+	.code {
+		border-spacing: 1em;
+		display: table;
+		table-layout: fixed;
+		width: 100%;
+	}
+	.code div {
+		display: table-cell;
+		width: 33.333%;
+	}
+	.code pre {
+		margin: 0;
+	}
+}
+
+button {
+	background: #EF6806;
+		background-image:    -moz-linear-gradient(#EF6806, #D54601);
+		background-image:     -ms-linear-gradient(#EF6806, #D54601);
+		background-image:      -o-linear-gradient(#EF6806, #D54601);
+		background-image: -webkit-linear-gradient(#EF6806, #D54601);
+	background-image:             linear-gradient(#EF6806, #D54601);
+	border: 1px solid #D54601;
+		   -moz-border-radius: 0.25em;
+		    -ms-border-radius: 0.25em;
+		     -o-border-radius: 0.25em;
+		-webkit-border-radius: 0.25em;
+	border-radius:             0.25em;
+	color: white;
+	cursor: pointer;
+}
+button[disabled] {
+	background: #eee;
+	border-color: #aaa;
+	color: #999;
+	cursor: default;
+}
+button.enable,
+button.destroy {
+	margin-left: 2em;
+}

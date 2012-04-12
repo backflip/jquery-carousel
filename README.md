@@ -17,7 +17,19 @@ See demos on http://backflip.github.com/jquery-carousel
 
 * Include some basic styling
 * Include jQuery and the script
-* Initialize carousel with `<script>$('#carousel').carousel(options);</script>` or `<script>var carousel = new Carousel($('#carousel'), options); carousel.init();</script>`
+* Initialize carousel with 
+```js
+<script>
+$('#carousel').carousel(options);
+</script>
+``` 
+or 
+```js
+<script>
+var carousel = new Carousel($('#carousel'), options);
+carousel.init();
+</script>
+```
 
 ## Methods
 

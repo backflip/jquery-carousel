@@ -83,7 +83,10 @@
 		events = utils.getNamespacedEvents(!support.touch ? 'click keydown' : 'touchstart'),
 		
 		// Detect movements if touch events are supported
-		hasMoved = false;
+		hasMoved = false,
+		
+		// Number of instances
+		instances = 0;
 
 
 	var Plugin = function(elem, options){
@@ -169,6 +172,9 @@
 				return this;
 			}
 			
+			// Index of this carousel instance
+			this.index = instances++;
+			
 			// Save settings		
 			this.settings = $.extend(true, {}, this.defaults, this.settings);
 			
@@ -223,7 +229,7 @@
 			this.update();
 			
 			// Re-calculate dimensions on window resize
-			$(window).on(utils.getNamespacedEvents('resize'), $.proxy(function(){
+			$(window).on(utils.getNamespacedEvents('resize') + this.index, $.proxy(function(){
 				if (resizeTimeout) {
 					clearTimeout(resizeTimeout);
 				}
@@ -492,7 +498,7 @@
 				.each(function(){
 					var $this = $(this),
 						styles = $this.data(namespace + '-css');
-	
+
 					$this.css(styles);
 				})
 				.removeData(namespace + '-css');
@@ -502,8 +508,7 @@
 			this.state.enabled = false;
 			this.props.current = 0;
 			
-			// TODO: what happens with more than one slider on page?
-			//$(window).off('resize.' + namespace);
+			$(window).off(utils.getNamespacedEvents('resize') + this.index);
 		},
 		
 		
@@ -617,20 +622,19 @@
 		},
 		
 		// Return initial styles (re-applied on destroy)
+		// TODO: How to detect "auto"?
 		_getStyles: function($element){
-			var styles = $element.get(0).style,
-				selection = {
-					height: styles.height,
-					left: styles.left,
-					'min-height': styles.minHeight,
-					top: styles.top,
-					width: styles.width
-				},
+			var styles = ['height', 'left', 'min-height', 'top', 'width'],
+				selection = {},
 				transition;
 			
+			for (var i = 0; i < styles.length; i++) {
+				selection[styles[i]] = $element.css(styles[i]);
+			}
+
 			if (support.transition) {
 				transition = support.transition.charAt(0).toLowerCase() + support.transition.substr(1);
-				selection[transition] = styles[transition];
+				selection[transition] = $element.css(transition);
 			}
 
 			return selection;

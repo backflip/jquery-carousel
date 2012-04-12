@@ -1,0 +1,74 @@
+.carousel-frame {
+	border: 1px solid #999;
+	overflow: hidden;
+	position: relative;
+}
+
+.carousel-slider {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	/* Trigger hardware acceleration */
+		   -moz-transform: translateZ(0);
+		    -ms-transform: translateZ(0);
+		     -o-transform: translateZ(0);
+		-webkit-transform: translateZ(0);
+	transform:             translateZ(0);
+}
+.carousel-slide {
+	float: left;
+	margin: 0;
+	padding: 0;
+}
+
+/* Prev / next navigation */
+.carousel-nav {
+	margin: 0.5em 0;
+	zoom: 1;
+}
+.carousel-nav:before,
+.carousel-nav:after {
+	content: "";
+	display: table;
+}
+.carousel-nav:after {
+	clear: both;
+}
+.carousel-nav span {
+	cursor: pointer;
+	float: left;
+}
+.carousel-nav .carousel-next {
+	float: right;
+}
+.carousel-nav .state-disabled {
+	color: #999;
+	cursor: default;
+	outline: none;
+}
+
+/* Counter ("slide x of y") */
+.carousel-counter {
+	margin: 0.5em 0;
+}
+
+/* Handles */
+.carousel-handles {
+	margin: 0.5em 0;
+	text-align: center;
+}
+.carousel-handles span {
+	cursor: pointer;
+	margin: 0 0.5em;
+}
+.carousel-handles .state-disabled {
+	color: #999;
+	cursor: default;
+	outline: none;
+}
+.carousel-handles .state-current {
+	color: #c30;
+	cursor: default;
+	outline: none;
+}

@@ -21,9 +21,6 @@ h3 {
 	max-width: 90em;
 }
 
-.desc {
-	
-}
 .examples {
 	counter-reset: example;
 	list-style: none;
@@ -38,11 +35,11 @@ h3 {
 .examples h3:before {
 	background: #eee;
 	border: 0.1em solid #ddd;
-		   -moz-border-radius: 1em;
-		    -ms-border-radius: 1em;
-		     -o-border-radius: 1em;
-		-webkit-border-radius: 1em;
-	border-radius:             1em;
+		   -moz-border-radius: 2em;
+		    -ms-border-radius: 2em;
+		     -o-border-radius: 2em;
+		-webkit-border-radius: 2em;
+	border-radius:             2em;
 	content: counter(example);
 	line-height: 2;
 	position: absolute;

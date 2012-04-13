@@ -250,35 +250,23 @@
 			
 			$.extend(true, this.settings, options);
 			
+			// Update jQuery slide object
 			this.$dom.slides = this.$dom.slides.parent().children();
+			
+			// Update properties
 			this.props.total = this.$dom.slides.length;
-			
 			this.props.current = this.settings.initialSlide;
+			this.props.visible = this._getVisibleSlides();
 			
-			if (this.settings.visibleSlides > 0) {
-				this.props.visible = this.settings.visibleSlides;
-			} else {
-				var minSize = 0,
-					containerSize = this.settings.behavior.horizontal ? this.$dom.frame.width() : this.$dom.frame.height();
-				
-				this.$dom.slides.each(function(){
-					var size = self.settings.behavior.horizontal ? $(this).width() : $(this).height();
-					
-					if (size > minSize) {
-						minSize = size;
-					}
-				});
-				this.props.visible = Math.round(containerSize/minSize);
-			}
-			
+			// Update jQuery handle object
 			if (this.settings.elements.handles) {
 				this.$dom.handlesContainer.html(this._getHandles());
 				this.$dom.handles = this.$dom.handlesContainer.children();
 			}
 			
-			this.state.enabled = false;
-
+			// Resize elements, disable and re-enable
 			this.resize();
+			this.disable();
 			this.enable();
 		},
 	
@@ -313,7 +301,6 @@
 			}
 			
 			if (this.settings.elements.prevNext) {
-				this.$dom.nav.off(events);
 				this.$dom.nav.on(events, function(event){
 					var $this = $(this),
 						isDisabled = $this.hasClass('state-disabled'),
@@ -335,7 +322,6 @@
 			}
 			
 			if (this.settings.elements.handles) {
-				this.$dom.handles.off(events);
 				this.$dom.handles.on(events, function(event){
 					var $this = $(this),
 						handleIndex = $this.index(),
@@ -349,12 +335,10 @@
 			}
 			
 			if (this.settings.touch.enabled && support.touch) {
-				this._touchDisable();
 				this._touchEnable();
 			}
 			
 			if (this.settings.behavior.keyboardNav) {
-				this.$dom.container.off(utils.getNamespacedEvents('keydown'));
 				this.$dom.container.on(utils.getNamespacedEvents('keydown'), $.proxy(function(event){
 					var $target = $(event.target),
 						nodeName = $target.get(0).nodeName.toLowerCase(),
@@ -489,10 +473,10 @@
 			this._updateNav();
 		},
 		next: function(){
-			this.goTo(this.props.current+1);
+			this.goTo(this.props.current + this.settings.animation.step);
 		},
 		prev: function(){
-			this.goTo(this.props.current-1);
+			this.goTo(this.props.current - this.settings.animation.step);
 		},
 		
 		destroy: function(){
@@ -694,6 +678,25 @@
 			}
 			
 			return i;
+		},
+		
+		// Calculate number of visible slides if not set
+		_getVisibleSlides: function(){
+			if (this.settings.visibleSlides > 0) {
+				return this.settings.visibleSlides;
+			} else {
+				var minSize = 0,
+					containerSize = this.settings.behavior.horizontal ? this.$dom.frame.width() : this.$dom.frame.height();
+				
+				this.$dom.slides.each(function(){
+					var size = self.settings.behavior.horizontal ? $(this).width() : $(this).height();
+					
+					if (size > minSize) {
+						minSize = size;
+					}
+				});
+				return Math.round(containerSize/minSize);
+			}
 		},
 		
 		// Shift slides around in circular mode

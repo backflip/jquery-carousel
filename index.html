@@ -6,9 +6,9 @@
 	
 	<meta name="viewport" content="width=device-width" />
 	
-	<link rel="stylesheet" href="css/demo.css" />
-	<link rel="stylesheet" href="css/jquery.carousel.css" />
-	<link rel="stylesheet" href="google-code-prettify/prettify.css" />
+	<link rel="stylesheet" href="assets/css/demo.css" />
+	<link rel="stylesheet" href="assets/css/jquery.carousel.css" />
+	<link rel="stylesheet" href="assets/google-code-prettify/prettify.css" />
 </head>
 <body>
 
@@ -368,7 +368,7 @@
 		<div class="js">
 			<h3>JavaScript</h3>
 			
-			<pre class="prettyprint"><code>// Init carousel
+			<pre class="prettyprint"><code>/* Init carousel */
 $('#carousel-07').carousel({
 	elements: {
 		prevNext: false,
@@ -377,7 +377,7 @@ $('#carousel-07').carousel({
 	}
 });
 
-// Bind event on custom buttons
+/* Bind event on custom buttons */
 $('#prev').on('click', function(){
 	$('#carousel-07').carousel('prev');
 });
@@ -385,8 +385,9 @@ $('#next').on('click', function(){
 	$('#carousel-07').carousel('next');
 });
 
-// Alternative
-/*var carousel = new Carousel($('#carousel-07'), {
+/* Alternative */
+/*
+var carousel = new Carousel($('#carousel-07'), {
 	elements: {
 		prevNext: false,
 		handles: false,
@@ -400,8 +401,8 @@ $('#prev').on('click', function(){
 });
 $('#next').on('click', function(){
 	carousel.next();
-});*/
-</code></pre>
+});
+*/</code></pre>
 		</div>
 
 		<div class="css">
@@ -436,25 +437,25 @@ $('#next').on('click', function(){
 		<div class="js">
 			<h3>JavaScript</h3>
 			
-			<pre class="prettyprint"><code>// Init carousel
+			<pre class="prettyprint"><code>/* Init carousel */
 var carousel = new Carousel($('#carousel-08'));
 carousel.init();
 
-// Clone third slide
+/* Clone third slide */
 var slide = carousel.$dom.slides.eq(2);
 slide.clone().insertAfter(slide);
 
-// Change settings
+/* Change settings */
 carousel.update({
 	animation: {
-		step: 2 // Move two slides on each slide event
+		step: 2 /* Move two slides on each slide event */
 	},
 	events: {
 		stop: function(i){
-			console.log('Visible slides: ' + (i+1) + ' & ' + (i+2)); // Slide callback
+			console.log('Visible slides: ' + (i+1) + ' & ' + (i+2)); /* Slide callback */
 		}
 	},
-	visibleSlides: 2 // Show two slides at the same time
+	visibleSlides: 2 /* Show two slides at the same time */
 });</code></pre>
 		</div>
 
@@ -490,11 +491,11 @@ carousel.update({
 		<div class="js">
 			<h3>JavaScript</h3>
 			
-			<pre class="prettyprint"><code>// Init carousel
+			<pre class="prettyprint"><code>/* Init carousel */
 var carousel = new Carousel($('#carousel-09'));
 carousel.init();
 
-// Destroy
+/* Destroy */
 carousel.destroy();</code></pre>
 		</div>
 
@@ -512,12 +513,12 @@ carousel.destroy();</code></pre>
 </div>
 
 
-<script src="js/jquery-1.7.2.min.js"></script>
+<script src="assets/js/jquery-1.7.2.min.js"></script>
 
-<script src="google-code-prettify/prettify.js"></script>
-<script src="google-code-prettify/lang-css.js"></script>
+<script src="assets/google-code-prettify/prettify.js"></script>
+<script src="assets/google-code-prettify/lang-css.js"></script>
 
-<script src="../jquery.carousel.min.js"></script>
+<script src="jquery.carousel.min.js"></script>
 
 <script>
 // http://yuiblog.com/blog/2007/06/07/style/

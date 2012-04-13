@@ -9,8 +9,8 @@ It's better than all the others, of course:
 
 Is uses Mark Dalgleish's [«Highly Configurable jQuery Plugins» pattern](http://markdalgleish.com/2011/05/creating-highly-configurable-jquery-plugins/).
 
-**Tested on:** IE 9, FF 3.6 and 11, Chrome 18, Safari 5.1.5, Opera 11.62, Mobile Safari on iOS 4 and 5.
-*Coming soon:* IE 6-8, default Android browser on HTC Hero.
+**Tested on:** IE 7-9, FF 3.6 and 11, Chrome 18, Safari 5.1.5, Opera 11.62, Mobile Safari on iOS 4 and 5.
+*Coming soon:* IE 6, default Android browser on a HTC Hero.
 
 ## How to use
 

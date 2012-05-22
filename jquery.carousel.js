@@ -4,6 +4,43 @@
 
 	var namespace = 'carousel', // Used for jQuery plugin name, event namespacing, CSS classes
 		
+		defaults = { // Default settings (see examples if something's not obvious)
+			animation: {
+				duration: 300,    // milliseconds
+				step: 1           // number of slides per animation (might be lower than number of visible slides)
+			},
+			behavior: {
+				horizontal: true, // set to false for vertical slider
+				circular: false,  // go to first slide after last one
+				autoplay: 0,      // auto-advance interval (0: no autoplay)
+				keyboardNav: true // enable arrow and [p][n] keys for prev / next actions
+			},
+			elements: {       // which navigational elements to show
+				prevNext: true,   // buttons for previous / next slide
+				handles: true,    // button for each slide showing its index
+				counter: true     // "Slide x of y"
+			},
+			events: {         // custom callbacks
+				start: false,     // function(currentSlideIndex){ … }
+				stop: false       // function(currentSlideIndex){ … }
+			},
+			initialSlide: 0,  // which slide to show on init
+			text: {           // content of navigational elements
+				next:    'show next slide',
+				prev:    'show previous slide',
+				counter: '%current% of %total%',
+				handle:  '%index%'
+			},
+			touch: {          // whether to enable touch support and which criteria to use for swipe movement
+				enabled: true,
+				thresholds: {
+					speed: 0.4,       // multiplied by width of slider per second
+					distance: 0.3     // multiplied by width of slider
+				}
+			},
+			visibleSlides: 1  // how many slides to fit within visible area (0: calculate based on initial width)
+		},		
+		
 		utils = {
 			// Return supported CSS transition property
 			// (based on https://gist.github.com/556448)
@@ -112,51 +149,12 @@
 				enabled: false,
 				animating: false
 			};
-		
-			this.settings = $.extend(true, {}, this.$dom.slider.data(namespace+'-options'), options);
+
+			this.settings = $.extend(true, {}, options, this.$dom.slider.data(namespace+'-options'));
 		};
 		
 
 	Plugin.prototype = {
-		// Default settings (see examples if something's not obvious)
-		defaults: {
-			animation: {
-				duration: 300,    // milliseconds
-				step: 1           // number of slides per animation (might be lower than number of visible slides)
-			},
-			behavior: {
-				horizontal: true, // set to false for vertical slider
-				circular: false,  // go to first slide after last one
-				autoplay: 0,      // auto-advance interval (0: no autoplay)
-				keyboardNav: true // enable arrow and [p][n] keys for prev / next actions
-			},
-			elements: {       // which navigational elements to show
-				prevNext: true,   // buttons for previous / next slide
-				handles: true,    // button for each slide showing its index
-				counter: true     // "Slide x of y"
-			},
-			events: {         // custom callbacks
-				start: false,     // function(currentSlideIndex){ … }
-				stop: false       // function(currentSlideIndex){ … }
-			},
-			initialSlide: 0,  // which slide to show on init
-			text: {           // content of navigational elements
-				next:    'show next slide',
-				prev:    'show previous slide',
-				counter: '%current% of %total%',
-				handle:  '%index%'
-			},
-			touch: {          // whether to enable touch support and which criteria to use for swipe movement
-				enabled: true,
-				thresholds: {
-					speed: 0.4,       // multiplied by width of slider per second
-					distance: 0.3     // multiplied by width of slider
-				}
-			},
-			visibleSlides: 1  // how many slides to fit within visible area (0: calculate based on initial width)
-		},
-		
-		
 		/**
 		 * Public methods
 		 */
@@ -176,8 +174,8 @@
 			this.index = instances++;
 			
 			// Save settings		
-			this.settings = $.extend(true, {}, this.defaults, this.settings);
-			
+			this.settings = $.extend(true, {}, defaults, this.settings);
+
 			// Save initial styles to data attribute
 			sliderStyles = this._getStyles($dom.slider);
 			
@@ -276,7 +274,7 @@
 				slidesWidth = this.settings.behavior.horizontal ? containerWidth / this.props.visible : containerWidth,
 				slidesHeight,
 				sliderWidth = this.settings.behavior.horizontal ? this.props.total * slidesWidth : slidesWidth;
-				
+
 			// Set new dimensions of items and slider
 			this.$dom.slides.width(slidesWidth);
 			this.$dom.slider.width(sliderWidth).height('auto');
@@ -288,7 +286,7 @@
 			// Set container height based on slides' height
 			containerHeight = this.settings.behavior.horizontal ? slidesHeight : this.props.visible * slidesHeight;
 			this.$dom.frame.height(containerHeight);
-			
+
 			// Jump to initial position
 			this.goTo(this.props.current, true);
 		},
@@ -296,7 +294,7 @@
 		enable: function(){		
 			var self = this;
 			
-			if (this.state.enabled) {
+			if (this.state.enabled || this.props.visible > this.props.total) {
 				return;
 			}
 			
@@ -436,9 +434,10 @@
 					self.state.animating = false;
 				},
 				prop, transitionProp, endEvent, transition, oldTransition;
-						
+
 			if (!skipAnimation) {
 				this.state.animating = true;
+				
 				if (this.settings.events.start) {
 					this.settings.events.start(index);
 				}
@@ -599,23 +598,19 @@
 		// Return slide index (in circular mode, slides change their index)
 		_getSlideIndex: function(index, original){
 			if (this.settings.behavior.circular) {
-				if (!original) {
-					// Get current index by original
-					this.$dom.slides.each(function(){
-						var $this = $(this),
-							currentIndex = $this.index(),
-							originalIndex = $this.data(namespace + '-index');
-	
-						if (originalIndex === index) {
-							index = currentIndex;
-							return false;
-						}
-					});
-				} else {
-					// Get original index by current
-					index = this.$dom.slides.eq(index).data(namespace + '-index');
-				}
+				this.$dom.slides.each(function(){
+					var $this = $(this),
+						currentIndex = $this.index(),
+						originalIndex = $this.data(namespace + '-index'),
+						wantedIndex = original ? currentIndex : originalIndex;
+
+					if (index === wantedIndex) {
+						index = currentIndex;
+						return false;
+					}
+				});
 			}
+
 			return index;
 		},
 		
@@ -668,7 +663,7 @@
 						return 0;
 					}
 				// Shift slides left / top to right / bottom
-				} else if (i > (this.props.total - this.props.visible)) {
+				} else if (this.props.total > this.props.visible && i > (this.props.total - this.props.visible)) {
 					var maxIndex = (i - 1) - (this.props.total - this.props.visible);
 
 					if (this._shiftSlides(maxIndex, 1)) {
@@ -685,7 +680,8 @@
 			if (this.settings.visibleSlides > 0) {
 				return this.settings.visibleSlides;
 			} else {
-				var minSize = 0,
+				var self = this,
+					minSize = 0,
 					containerSize = this.settings.behavior.horizontal ? this.$dom.frame.width() : this.$dom.frame.height();
 				
 				this.$dom.slides.each(function(){
@@ -695,6 +691,7 @@
 						minSize = size;
 					}
 				});
+				
 				return Math.round(containerSize/minSize);
 			}
 		},
@@ -870,7 +867,7 @@
 				if (this.settings.elements.handles) {
 					var currentIndex = this._getSlideIndex(this.props.current, true),
 						currentHandles = (currentIndex > 0) ? ':gt(' + (currentIndex - 1) + '):lt(' + this.props.visible + ')' : ':lt(' + (currentIndex + this.props.visible) + ')';
-	
+
 					utils.enableButton(this.$dom.handles);
 					
 					this.$dom.handles.removeClass('state-current');
@@ -888,13 +885,9 @@
 			}
 			
 			if (this.settings.elements.counter) {
-				var counterCurrent = this.props.current + 1,
-					counterCurrentMax = this.props.current + this.props.visible,
+				var counterCurrent = this._getSlideIndex(this.props.current, true) + 1,
+					counterCurrentMax = counterCurrent + (this.props.visible - 1),
 					text;
-					
-				if (this.settings.behavior.circular) {
-					counterCurrent = this.$dom.slides.eq(this.props.current).data(namespace + '-index') + 1;
-				}
 				
 				if (this.props.visible > 1) {
 					if (counterCurrentMax > this.props.total) {

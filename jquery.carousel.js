@@ -136,7 +136,9 @@
 				prev:             $('<span class="'+ namespace + '-prev" role="button" tabindex="0" />'),
 				next:             $('<span class="'+ namespace + '-next" role="button" tabindex="0" />'),
 				counter:          $('<div class="' + namespace + '-counter" aria-hidden="true" />'),
-				handlesContainer: $('<div class="' + namespace + '-handles" aria-hidden="true" />')
+				handlesContainer: $('<div class="' + namespace + '-handles" aria-hidden="true" />'),
+				handles:          this.$dom.handesContainer.children(),
+				handle:           $('<span class="'+ namespace + '-handle" role="button" tabindex="0" />')
 			};
 			
 			this.props = {
@@ -562,22 +564,25 @@
 			}
 		},
 		
-		// Return a group of handles (one for each slide=
+		// Return a group of handles (one for each slide)
 		_getHandles: function(){
 			var fragment = document.createDocumentFragment();
 			
 			for (var i = 0; i < this.props.total; i++) {
-				var handle = document.createElement('span');
-
-				handle.className = namespace + '-handle';
-				handle.innerHTML = this.settings.text.handle.replace('%index%', (i+1));
-				handle.setAttribute('role', 'button');
-				handle.setAttribute('tabindex', 0);
+//				var handle = document.createElement('span');
+//
+//				handle.className = namespace + '-handle';
+//				handle.innerHTML = this.settings.text.handle.replace('%index%', (i+1));
+//				handle.setAttribute('role', 'button');
+//				handle.setAttribute('tabindex', 0);
+				
+				var text = this.settings.text.handle.replace('%index%', (i+1)),
+					handle = this.$dom.handle.clone().text(text).get(0);
 				
 				fragment.appendChild(handle);
 			}
 			
-			return $(fragment);
+			return $(fragment); 
 		},
 		
 		// Return maximal height of slides

@@ -137,7 +137,7 @@
 				next:             $('<span class="'+ namespace + '-next" role="button" tabindex="0" />'),
 				counter:          $('<div class="' + namespace + '-counter" aria-hidden="true" />'),
 				handlesContainer: $('<div class="' + namespace + '-handles" aria-hidden="true" />'),
-				handles:          this.$dom.handesContainer.children(),
+				handles:          this.$dom.handlesContainer.children(),
 				handle:           $('<span class="'+ namespace + '-handle" role="button" tabindex="0" />')
 			};
 			

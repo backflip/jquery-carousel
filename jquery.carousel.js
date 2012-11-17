@@ -835,6 +835,10 @@
 					} 
 				
 					self.goTo(targetSlide);
+			
+					if (self.settings.behavior.autoplay) {
+						self._autoplayDisable();
+					}
 				}
 			};
 			

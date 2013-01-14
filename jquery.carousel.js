@@ -73,7 +73,7 @@
 			getTransitionEndEvent: function(){
 				var property = utils.getTransitionProperty(),
 					map = {
-						'transition':       'transitionEnd',
+						'transition':       'transitionend',
 						'MozTransition':    'transitionend',
 						'msTransition':     'msTransitionEnd',
 						'OTransition':      'oTransitionEnd',

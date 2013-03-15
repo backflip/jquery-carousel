@@ -325,7 +325,7 @@
 				this.$dom.handles.on(events, function(event){
 					var $this = $(this),
 						handleIndex = $this.index(),
-						slideIndex = self._getSlideIndex(handleIndex),
+						slideIndex = self._getSlidePosition(handleIndex),
 						callback = function(){
 							self.goTo(slideIndex);
 						};
@@ -364,7 +364,7 @@
 						// number keys
 						} else if (47 < code && code < 58) {
 							targetIndex = code - 49;
-							slideIndex = self._getSlideIndex(targetIndex);
+							slideIndex = self._getSlidePosition(targetIndex);
 							
 							this.goTo(slideIndex);
 							
@@ -600,16 +600,23 @@
 			return height;
 		},
 		
-		// Return slide index (in circular mode, slides change their index)
-		_getSlideIndex: function(index, original){
+		// Return original slide index (in circular mode, slides change their index)
+		_getSlideIndex: function(position){
+			if (this.settings.behavior.circular) {
+				return this.$dom.slides.eq(position).data(namespace + '-index');
+			}
+
+			return position;
+		},
+		// Return slide position by original index
+		_getSlidePosition: function(index){
 			if (this.settings.behavior.circular) {
 				this.$dom.slides.each(function(){
 					var $this = $(this),
 						currentIndex = $this.index(),
-						originalIndex = $this.data(namespace + '-index'),
-						wantedIndex = original ? currentIndex : originalIndex;
+						originalIndex = $this.data(namespace + '-index');
 
-					if (index === wantedIndex) {
+					if (index === originalIndex) {
 						index = currentIndex;
 						return false;
 					}
@@ -874,7 +881,7 @@
 				}
 				
 				if (this.settings.elements.handles) {
-					var currentIndex = this._getSlideIndex(this.props.current, true),
+					var currentIndex = this._getSlideIndex(this.props.current),
 						currentHandles = (currentIndex > 0) ? ':gt(' + (currentIndex - 1) + '):lt(' + this.props.visible + ')' : ':lt(' + (currentIndex + this.props.visible) + ')';
 
 					utils.enableButton(this.$dom.handles);
@@ -894,7 +901,7 @@
 			}
 			
 			if (this.settings.elements.counter) {
-				var counterCurrent = this._getSlideIndex(this.props.current, true) + 1,
+				var counterCurrent = this._getSlideIndex(this.props.current) + 1,
 					counterCurrentMax = counterCurrent + (this.props.visible - 1),
 					text;
 				

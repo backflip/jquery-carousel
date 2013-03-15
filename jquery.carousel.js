@@ -325,7 +325,7 @@
 				this.$dom.handles.on(events, function(event){
 					var $this = $(this),
 						handleIndex = $this.index(),
-						slideIndex = self._getSlidePosition(handleIndex),
+						slideIndex = self._getCurrentSlideIndex(handleIndex),
 						callback = function(){
 							self.goTo(slideIndex);
 						};
@@ -364,7 +364,7 @@
 						// number keys
 						} else if (47 < code && code < 58) {
 							targetIndex = code - 49;
-							slideIndex = self._getSlidePosition(targetIndex);
+							slideIndex = self._getCurrentSlideIndex(targetIndex);
 							
 							this.goTo(slideIndex);
 							
@@ -601,23 +601,27 @@
 		},
 		
 		// Return original slide index (in circular mode, slides change their index)
-		_getSlideIndex: function(position){
+		_getOriginalSlideIndex: function(currentIndex){
+			var index = currentIndex;
+
 			if (this.settings.behavior.circular) {
-				return this.$dom.slides.eq(position).data(namespace + '-index');
+				index = this.$dom.slides.eq(currentIndex).data(namespace + '-index');
 			}
 
-			return position;
+			return index;
 		},
 		// Return slide position by original index
-		_getSlidePosition: function(index){
+		_getCurrentSlideIndex: function(originalIndex){
+			var index = originalIndex;
+
 			if (this.settings.behavior.circular) {
 				this.$dom.slides.each(function(){
 					var $this = $(this),
-						currentIndex = $this.index(),
-						originalIndex = $this.data(namespace + '-index');
+						currentSlideIndex = $this.index(),
+						originalSlideIndex = $this.data(namespace + '-index');
 
-					if (index === originalIndex) {
-						index = currentIndex;
+					if (originalIndex === originalSlideIndex) {
+						index = currentSlideIndex;
 						return false;
 					}
 				});
@@ -881,7 +885,7 @@
 				}
 				
 				if (this.settings.elements.handles) {
-					var currentIndex = this._getSlideIndex(this.props.current),
+					var currentIndex = this._getOriginalSlideIndex(this.props.current),
 						currentHandles = (currentIndex > 0) ? ':gt(' + (currentIndex - 1) + '):lt(' + this.props.visible + ')' : ':lt(' + (currentIndex + this.props.visible) + ')';
 
 					utils.enableButton(this.$dom.handles);
@@ -901,7 +905,7 @@
 			}
 			
 			if (this.settings.elements.counter) {
-				var counterCurrent = this._getSlideIndex(this.props.current) + 1,
+				var counterCurrent = this._getOriginalSlideIndex(this.props.current) + 1,
 					counterCurrentMax = counterCurrent + (this.props.visible - 1),
 					text;
 				

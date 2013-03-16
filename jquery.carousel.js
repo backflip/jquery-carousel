@@ -13,6 +13,7 @@
 				horizontal: true, // set to false for vertical slider
 				circular: false,  // go to first slide after last one
 				autoplay: 0,      // auto-advance interval (0: no autoplay)
+				pauseAutoplayOnHover: true,
 				keyboardNav: true // enable arrow and [p][n] keys for prev / next actions
 			},
 			elements: {       // which navigational elements to show
@@ -384,9 +385,17 @@
 			}
 			
 			if (this.settings.behavior.autoplay) {
-				this.autoplay = setInterval(function(){
-					self.next();
-				}, this.settings.behavior.autoplay);
+				this._autoplayEnable();
+
+				if (this.settings.behavior.pauseAutoplayOnHover) {
+					this.$dom.container.on(utils.getNamespacedEvents('mouseenter'), $.proxy(function(event){
+						this._autoplayDisable();
+					}, this));
+
+					this.$dom.container.on(utils.getNamespacedEvents('mouseleave'), $.proxy(function(event){
+						this._autoplayEnable();
+					}, this));
+				}
 			}
 			
 			this.state.enabled = true;
@@ -514,6 +523,12 @@
 		/**
 		 * Pseudo-private helper functions
 		 */
+
+		_autoplayEnable: function(){
+			this.autoplay = setInterval($.proxy(function(){
+				this.next();
+			}, this), this.settings.behavior.autoplay);
+		},
 		
 		// Clear autoplay interval 
 		_autoplayDisable: function(){

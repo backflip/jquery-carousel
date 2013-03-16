@@ -55,6 +55,7 @@ carousel.init();
 		horizontal: true, // set to false for vertical slider
 		circular: false,  // go to first slide after last one
 		autoplay: 0,      // auto-advance interval (0: no autoplay)
+		pauseAutoplayOnHover: true, // guess what: auto-advance is paused when hovering the container
 		keyboardNav: true // enable arrow and [p][n] keys for prev / next actions
 	},
 	elements: {       // which navigational elements to show

@@ -1,4 +1,4 @@
-/*! jQuery Carousel Plugin by Thomas Jaggi (2012) - http://github.com/backflip/jquery-carousel/ */
+/*! jQuery Carousel Plugin by Thomas Jaggi (2013) - http://github.com/backflip/jquery-carousel/ */
 ;(function(window, document, $, undefined){
 	"use strict";
 
@@ -22,8 +22,8 @@
 				counter: true     // "Slide x of y"
 			},
 			events: {         // custom callbacks
-				start: false,     // function(currentSlideIndex){ … }
-				stop: false       // function(currentSlideIndex){ … }
+				start: false,     // function(targetDomIndex, targetSlideIndex){ … }
+				stop: false       // function(targetDomIndex, targetSlideIndex){ … }
 			},
 			initialSlide: 0,  // which slide to show on init
 			text: {           // content of navigational elements
@@ -449,9 +449,6 @@
 				},
 				prop, transitionProp, endEvent, transition, oldTransition;
 
-			this.props.currentDomIndex = index;
-			this.props.currentSlideIndex = currentSlideIndex;
-
 			if (!skipAnimation) {
 				this.state.animating = true;
 				
@@ -483,6 +480,9 @@
 			} else {
 				this.$dom.slider.css(cssPosition);
 			}
+
+			this.props.currentDomIndex = index;
+			this.props.currentSlideIndex = currentSlideIndex;
 
 			this._updateNav();
 		},

@@ -143,7 +143,8 @@
 			};
 			
 			this.props = {
-				current: 0,
+				currentDomIndex: 0,
+				currentSlideIndex: 0,
 				total: 0,
 				visible: 0
 			};
@@ -256,7 +257,8 @@
 			
 			// Update properties
 			this.props.total = this.$dom.slides.length;
-			this.props.current = this.settings.initialSlide;
+			this.props.currentDomIndex = this.settings.initialSlide;
+			this.props.currentSlideIndex = this.settings.initialSlide;
 			this.props.visible = this._getVisibleSlides();
 			
 			// Update jQuery handle object
@@ -291,7 +293,7 @@
 			this.$dom.frame.height(containerHeight);
 
 			// Jump to initial position
-			this.goTo(this.props.current, true);
+			this.goTo(this.props.currentDomIndex, true);
 		},
 				
 		enable: function(){		
@@ -312,7 +314,7 @@
 					}
 
 					dir = $this.is(self.$dom.next) ? 1 : -1;
-					target = dir * self.settings.animation.step + self.props.current;
+					target = dir * self.settings.animation.step + self.props.currentDomIndex;
 					
 					callback = function(){
 						self.goTo(target);
@@ -436,21 +438,25 @@
 		goTo: function(i, skipAnimation){
 			var self = this,
 				index = this._getValidatedTarget(i),
+				currentSlideIndex = this._getOriginalSlideIndex(index),
 				cssPosition = this._getTargetPosition(index),
 				duration = skipAnimation ? 0 : this.settings.animation.duration,
 				callback = function(){
 					if (self.settings.events.stop) {
-						self.settings.events.stop(index);
+						self.settings.events.stop(index, currentSlideIndex);
 					}
 					self.state.animating = false;
 				},
 				prop, transitionProp, endEvent, transition, oldTransition;
 
+			this.props.currentDomIndex = index;
+			this.props.currentSlideIndex = currentSlideIndex;
+
 			if (!skipAnimation) {
 				this.state.animating = true;
 				
 				if (this.settings.events.start) {
-					this.settings.events.start(index);
+					this.settings.events.start(index, currentSlideIndex);
 				}
 				
 				if (!support.transition) {
@@ -477,16 +483,14 @@
 			} else {
 				this.$dom.slider.css(cssPosition);
 			}
-			
-			this.props.current = index;
-			
+
 			this._updateNav();
 		},
 		next: function(){
-			this.goTo(this.props.current + this.settings.animation.step);
+			this.goTo(this.props.currentDomIndex + this.settings.animation.step);
 		},
 		prev: function(){
-			this.goTo(this.props.current - this.settings.animation.step);
+			this.goTo(this.props.currentDomIndex - this.settings.animation.step);
 		},
 		
 		destroy: function(){
@@ -514,7 +518,8 @@
 			$dom.container.remove();
 			
 			this.state.enabled = false;
-			this.props.current = 0;
+			this.props.currentDomIndex = 0;
+			this.props.currentSlideIndex = 0;
 			
 			$(window).off(utils.getNamespacedEvents('resize') + this.index);
 		},
@@ -839,7 +844,7 @@
 				var event = e.originalEvent.targetTouches[0],
 					distance = getDistance(),
 					speed,
-					targetSlide = self.props.current;
+					targetSlide = self.props.currentDomIndex;
 				
 				// Check if swipe direction was correct
 				if (Math.abs(distance.x) > Math.abs(distance.y)) {
@@ -857,7 +862,7 @@
 							slidesSwiped = 1;
 						}
 
-						targetSlide = self.props.current + swipeDir*slidesSwiped;
+						targetSlide = self.props.currentDomIndex + swipeDir*slidesSwiped;
 					} 
 				
 					self.goTo(targetSlide);
@@ -885,13 +890,13 @@
 					utils.enableButton(this.$dom.next);
 				
 					if (!this.settings.behavior.circular) {
-						if (this.props.current === 0) {
+						if (this.props.currentDomIndex === 0) {
 							utils.disableButton(this.$dom.prev);
 						} else {
 							utils.enableButton(this.$dom.prev);
 						}
 						
-						if (this.props.current === this.props.total - this.props.visible) {
+						if (this.props.currentDomIndex === this.props.total - this.props.visible) {
 							utils.disableButton(this.$dom.next);
 						} else {
 							utils.enableButton(this.$dom.next);
@@ -900,7 +905,7 @@
 				}
 				
 				if (this.settings.elements.handles) {
-					var currentIndex = this._getOriginalSlideIndex(this.props.current),
+					var currentIndex = this._getOriginalSlideIndex(this.props.currentDomIndex),
 						currentHandles = (currentIndex > 0) ? ':gt(' + (currentIndex - 1) + '):lt(' + this.props.visible + ')' : ':lt(' + (currentIndex + this.props.visible) + ')';
 
 					utils.enableButton(this.$dom.handles);
@@ -920,7 +925,7 @@
 			}
 			
 			if (this.settings.elements.counter) {
-				var counterCurrent = this._getOriginalSlideIndex(this.props.current) + 1,
+				var counterCurrent = this._getOriginalSlideIndex(this.props.currentDomIndex) + 1,
 					counterCurrentMax = counterCurrent + (this.props.visible - 1),
 					text;
 				

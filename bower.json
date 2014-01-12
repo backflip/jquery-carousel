@@ -1,0 +1,8 @@
+{
+  "name": "jquery-carousel",
+  "version": "1.0.0",
+  "main": ["./jquery.carousel.js"],
+  "author": "Thomas Jaggi",
+  "license": ["MIT", "GPL"],
+  "keywords": ["Carousel", "Slider"]
+}

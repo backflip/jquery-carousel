@@ -14,7 +14,8 @@
 				circular: false,  // go to first slide after last one
 				autoplay: 0,      // auto-advance interval (0: no autoplay)
 				pauseAutoplayOnHover: true,
-				keyboardNav: true // enable arrow and [p][n] keys for prev / next actions
+				keyboardNav: true, // enable arrow and [p][n] keys for prev / next actions
+				groupedHandles: true // combine handles to group if visibleSlides > 1 (e.g. "1-3", "4-6", "7")
 			},
 			elements: {       // which navigational elements to show
 				prevNext: true,   // buttons for previous / next slide
@@ -327,7 +328,7 @@
 			if (this.settings.elements.handles) {
 				this.$dom.handles.on(events, function(event){
 					var $this = $(this),
-						handleIndex = $this.index(),
+						handleIndex = $this.data(namespace +'-handle-index') || $this.index(),
 						slideIndex = self._getCurrentSlideIndex(handleIndex),
 						callback = function(){
 							self.goTo(slideIndex);
@@ -586,20 +587,48 @@
 
 		// Return a group of handles (one for each slide)
 		_getHandles: function(){
-			var fragment = document.createDocumentFragment();
+			var fragment = document.createDocumentFragment(),
+				slideGroups;
 
-			for (var i = 0; i < this.props.total; i++) {
-//				var handle = document.createElement('span');
-//
-//				handle.className = namespace + '-handle';
-//				handle.innerHTML = this.settings.text.handle.replace('%index%', (i+1));
-//				handle.setAttribute('role', 'button');
-//				handle.setAttribute('tabindex', 0);
+			if (!this.settings.behavior.groupedHandles) {
+				for (var i = 0; i < this.props.total; i++) {
+					// var handle = document.createElement('span');
 
-				var text = this.settings.text.handle.replace('%index%', (i+1)),
-					handle = this.$dom.handle.clone().text(text).get(0);
+					// handle.className = namespace + '-handle';
+					// handle.innerHTML = this.settings.text.handle.replace('%index%', (i+1));
+					// handle.setAttribute('role', 'button');
+					// handle.setAttribute('tabindex', 0);
 
-				fragment.appendChild(handle);
+					var text = this.settings.text.handle.replace('%index%', (i+1)),
+						handle = this.$dom.handle.clone().text(text).get(0);
+
+					fragment.appendChild(handle);
+				}
+			} else {
+				slideGroups = this.props.total / this.props.visible;
+
+				for (var i = 0; i < slideGroups; i++) {
+					var minIndex = i * this.props.visible + 1,
+						maxIndex = (i+1) * this.props.visible,
+						$handle = this.$dom.handle.clone(),
+						handle, text;
+
+					if (maxIndex > this.props.total) {
+						maxIndex = this.props.total;
+					}
+
+					if (minIndex < maxIndex) {
+						text = minIndex +' - '+ maxIndex;
+					} else {
+						text = maxIndex;
+					}
+
+					text = this.settings.text.handle.replace('%index%', text);
+
+					handle = $handle.text(text).data(namespace + '-handle-index', minIndex-1).get(0);
+
+					fragment.appendChild(handle);
+				}
 			}
 
 			return $(fragment);
@@ -907,6 +936,10 @@
 				if (this.settings.elements.handles) {
 					var currentIndex = this._getOriginalSlideIndex(this.props.currentDomIndex),
 						currentHandles = (currentIndex > 0) ? ':gt(' + (currentIndex - 1) + '):lt(' + this.props.visible + ')' : ':lt(' + (currentIndex + this.props.visible) + ')';
+
+					if (this.settings.behavior.groupedHandles) {
+						currentHandles = ':eq(' + Math.ceil(currentIndex/this.props.visible) + ')';
+					}
 
 					utils.enableButton(this.$dom.handles);
 

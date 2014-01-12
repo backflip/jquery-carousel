@@ -42,7 +42,8 @@
 				}
 			},
 			visibleSlides: 1, // how many slides to fit within visible area (0: calculate based on initial width)
-			$syncedCarousels: null // jQuery collection of carousel elements to sync with
+			$syncedCarousels: null, // jQuery collection of carousel elements to sync with
+			resetInitialStylesOnDestroy: false // you get the idea
 		},
 
 		utils = {
@@ -185,15 +186,18 @@
 			this.settings = $.extend(true, {}, defaults, this.settings);
 
 			// Save initial styles to data attribute
-			sliderStyles = this._getStyles($dom.slider);
+			if (this.settings.resetInitialStylesOnDestroy) {
+				sliderStyles = this._getStyles($dom.slider);
 
-			$dom.slider.data(namespace + '-css', sliderStyles);
-			$dom.slides.each(function(){
-				var $this = $(this),
-					styles = self._getStyles($this);
+				$dom.slider.data(namespace + '-css', sliderStyles);
 
-				$this.data(namespace + '-css', styles);
-			});
+				$dom.slides.each(function(){
+					var $this = $(this),
+						styles = self._getStyles($this);
+
+					$this.data(namespace + '-css', styles);
+				});
+			}
 
 			// Wrap slider with containers
 			$dom.container.insertBefore($dom.slider);
@@ -287,12 +291,12 @@
 		resize: function(){
 			var containerWidth = this.$dom.frame.width(),
 				containerHeight,
-				slidesWidth = this.settings.behavior.horizontal ? containerWidth / this.props.visible : containerWidth,
+				slidesWidth = this.settings.behavior.horizontal ? Math.floor(containerWidth / this.props.visible) : containerWidth,
 				slidesHeight,
 				sliderWidth = this.settings.behavior.horizontal ? this.props.total * slidesWidth : slidesWidth;
 
 			// Set new dimensions of items and slider
-			this.$dom.slides.width(slidesWidth);
+			this.$dom.slides.outerWidth(slidesWidth);
 			this.$dom.slider.width(sliderWidth).height('auto');
 
 			if (this.settings.behavior.fixedHeight) {
@@ -526,25 +530,36 @@
 
 		destroy: function(){
 			var $dom = this.$dom,
-				sliderStyles = $dom.slider.data(namespace + '-css');
+				sliderStyles;
 
 			$dom.slider
 				.removeClass(namespace + '-slider')
 				.removeData(namespace)
-				.removeData(namespace + '-css')
-				.insertAfter($dom.container)
-				.css(sliderStyles);
+				.insertAfter($dom.container);
 
 			$dom.slides
 				.removeClass(namespace + '-slide')
-				.removeData(namespace + '-index')
-				.each(function(){
+				.removeData(namespace + '-index');
+
+			if (this.settings.resetInitialStylesOnDestroy) {
+				sliderStyles = $dom.slider.data(namespace + '-css');
+
+				$dom.slider
+					.css(sliderStyles)
+					.removeData(namespace + '-css');
+
+				$dom.slides.each(function(){
 					var $this = $(this),
 						styles = $this.data(namespace + '-css');
 
-					$this.css(styles);
-				})
-				.removeData(namespace + '-css');
+					$this
+						.css(styles)
+						.removeData(namespace + '-css');
+				});
+			} else {
+				$dom.slider.removeAttr('style');
+				$dom.slides.removeAttr('style');
+			}
 
 			$dom.container.remove();
 
@@ -674,7 +689,7 @@
 			}
 
 			$slides.each(function(){
-				var slideHeight = $(this).css('min-height', 0).height();
+				var slideHeight = $(this).css('min-height', 0).outerHeight();
 
 				if (slideHeight > height) {
 					height = slideHeight;
@@ -735,7 +750,7 @@
 
 		// Return slide position
 		_getTargetPosition: function(index){
-			var slidesSize = this.settings.behavior.horizontal ? this.$dom.slides.width() : this.$dom.slides.height(),
+			var slidesSize = this.settings.behavior.horizontal ? this.$dom.slides.outerWidth() : this.$dom.slides.outerHeight(),
 				prop = this.settings.behavior.horizontal ? 'left' : 'top',
 				css = {};
 
@@ -785,7 +800,7 @@
 					containerSize = this.settings.behavior.horizontal ? this.$dom.frame.width() : this.$dom.frame.height();
 
 				this.$dom.slides.each(function(){
-					var size = self.settings.behavior.horizontal ? $(this).width() : $(this).height();
+					var size = self.settings.behavior.horizontal ? $(this).outerWidth() : $(this).outerHeight();
 
 					if (size > minSize) {
 						minSize = size;
@@ -803,7 +818,7 @@
 
 			if ($slides.length > 0) {
 				var axis = this.settings.behavior.horizontal ? 'left' : 'top',
-					slideDimension = this.settings.behavior.horizontal ? this.$dom.slides.width() : this.$dom.slides.height(),
+					slideDimension = this.settings.behavior.horizontal ? this.$dom.slides.outerWidth() : this.$dom.slides.outerHeight(),
 					currentPosition = this.$dom.slider.position(),
 					newPosition = {};
 
@@ -921,7 +936,7 @@
 
 					// Check if either swipe distance or speed was sufficient
 					if (Math.abs(distance.x) > thresholds.distance || speed > thresholds.speed) {
-						var refDimension = self.settings.behavior.horizontal ? self.$dom.slides.width() : self.$dom.slides.height(),
+						var refDimension = self.settings.behavior.horizontal ? self.$dom.slides.outerWidth() : self.$dom.slides.outerHeight(),
 							swipeDir = (distance.x > 0) ? -1 : 1,
 							slidesSwiped = Math.abs(Math.round(distance.x / refDimension));
 
@@ -1024,6 +1039,8 @@
 			this.$dom.frame.animate({
 				height: height
 			}, this.settings.animation.duration);
+
+			this.$dom.slides.css('min-height', height);
 		}
 	};
 

@@ -34,7 +34,7 @@ h3 {
 	margin: 0 0 5em 0;
 	padding: 0;
 }
-.examples > li { 
+.examples > li {
 	counter-increment: example;
 	margin-bottom: 3em;
 	position: relative;
@@ -56,10 +56,13 @@ h3 {
 	width: 2em;
 }
 
-.carousel {
+.example > .carousel {
 	border: 1px solid #ddd;
 	margin-bottom: 1.5em;
 	padding: 1em;
+}
+.carousel-frame {
+	border: 1px solid #ddd;
 }
 
 .code {

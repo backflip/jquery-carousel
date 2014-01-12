@@ -15,7 +15,8 @@
 				autoplay: 0,      // auto-advance interval (0: no autoplay)
 				pauseAutoplayOnHover: true,
 				keyboardNav: true, // enable arrow and [p][n] keys for prev / next actions
-				groupedHandles: true // combine handles to group if visibleSlides > 1 (e.g. "1-3", "4-6", "7")
+				groupedHandles: true, // combine handles to group if visibleSlides > 1 (e.g. "1-3", "4-6", "7")
+				fixedHeight: true  // set height based on highest slide
 			},
 			elements: {       // which navigational elements to show
 				prevNext: true,   // buttons for previous / next slide
@@ -285,13 +286,15 @@
 			this.$dom.slides.width(slidesWidth);
 			this.$dom.slider.width(sliderWidth).height('auto');
 
-			// Get highest slide and set equal min-height for all slides
-			slidesHeight = this._getHighestSlide();
-			this.$dom.slides.css('min-height', slidesHeight);
+			if (this.settings.behavior.fixedHeight) {
+				// Get highest slide and set equal min-height for all slides
+				slidesHeight = this._getHighestSlide();
+				this.$dom.slides.css('min-height', slidesHeight);
 
-			// Set container height based on slides' height
-			containerHeight = this.settings.behavior.horizontal ? slidesHeight : this.props.visible * slidesHeight;
-			this.$dom.frame.height(containerHeight);
+				// Set container height based on slides' height
+				containerHeight = this.settings.behavior.horizontal ? slidesHeight : this.props.visible * slidesHeight;
+				this.$dom.frame.height(containerHeight);
+			}
 
 			// Jump to initial position
 			this.goTo(this.props.currentDomIndex, true);
@@ -404,6 +407,10 @@
 			this.state.enabled = true;
 
 			this._updateNav();
+
+			if (!this.settings.behavior.fixedHeight) {
+				this._updateHeight();
+			}
 		},
 
 		disable: function(args){
@@ -434,6 +441,10 @@
 			this.state.enabled = false;
 
 			this._updateNav();
+
+			if (!this.settings.behavior.fixedHeight) {
+				this._updateHeight();
+			}
 		},
 
 		goTo: function(i, skipAnimation){
@@ -486,6 +497,10 @@
 			this.props.currentSlideIndex = currentSlideIndex;
 
 			this._updateNav();
+
+			if (!this.settings.behavior.fixedHeight) {
+				this._updateHeight();
+			}
 		},
 		next: function(){
 			this.goTo(this.props.currentDomIndex + this.settings.animation.step);
@@ -635,10 +650,15 @@
 		},
 
 		// Return maximal height of slides
-		_getHighestSlide: function(){
-			var height = 0;
+		_getHighestSlide: function(filterSelector){
+			var height = 0,
+				$slides = this.$dom.slides;
 
-			this.$dom.slides.each(function(){
+			if (filterSelector) {
+				$slides = $slides.filter(filterSelector);
+			}
+
+			$slides.each(function(){
 				var slideHeight = $(this).css('min-height', 0).height();
 
 				if (slideHeight > height) {
@@ -972,6 +992,19 @@
 
 				this.$dom.counter.text(text);
 			}
+		},
+
+		// Update slider based on currently visible slides
+		// TODO: called twice on init
+		_updateHeight: function() {
+			var minIndex = this.props.currentDomIndex,
+				maxIndex = minIndex + this.props.visible,
+				filterSelector = (minIndex > 0) ? ':gt(' + (minIndex-1) + '):lt(' + (maxIndex) + ')' : ':lt(' + (maxIndex) + ')',
+				height = this._getHighestSlide(filterSelector);
+
+			this.$dom.frame.animate({
+				height: height
+			}, this.settings.animation.duration);
 		}
 	};
 

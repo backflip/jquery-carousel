@@ -999,7 +999,7 @@
 		_updateHeight: function() {
 			var minIndex = this.props.currentDomIndex,
 				maxIndex = minIndex + this.props.visible,
-				filterSelector = (minIndex > 0) ? ':gt(' + (minIndex-1) + '):lt(' + (maxIndex) + ')' : ':lt(' + (maxIndex) + ')',
+				filterSelector = (minIndex > 0) ? ':gt(' + (minIndex - 1) + '):lt(' + this.props.visible + ')' : ':lt(' + (maxIndex) + ')',
 				height = this._getHighestSlide(filterSelector);
 
 			this.$dom.frame.animate({

@@ -14,7 +14,7 @@ Is uses Mark Dalgleish's [«Highly Configurable jQuery Plugins» pattern](http:/
 
 ## How to use
 
-Demos: http://backflip.github.com/jquery-carousel/
+Demos: http://backflip.github.com/jquery-carousel/demo/
 
 * Include some basic styling (see below)
 * Include jQuery and the script

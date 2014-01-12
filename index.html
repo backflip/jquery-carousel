@@ -313,7 +313,7 @@
 
 <h3>Slider adapting height based on currently visible slides</h3>
 
-<div class="example" id="example-06-a">
+<div class="example" id="example-10">
 	<div class="carousel"></div>
 
 	<div class="code">
@@ -353,7 +353,7 @@
 
 <h3>Vertical slider</h3>
 
-<div class="example" id="example-06-b">
+<div class="example" id="example-06">
 	<div class="carousel"></div>
 
 	<div class="code">
@@ -377,6 +377,55 @@
 		horizontal: false
 	},
 	visibleSlides: 2
+});</code></pre>
+		</div>
+
+		<div class="css">
+			<h3>CSS</h3>
+
+			<pre><code class="lang-css">/* Default (css/jquery.carousel.css) */</code></pre>
+		</div>
+	</div>
+</div>
+
+		</li>
+		<li>
+
+<h3>Synced sliders</h3>
+
+<div class="example" id="example-11">
+	<div class="carousel"></div>
+
+	<div class="code">
+		<div class="html">
+			<h3>HTML</h3>
+
+			<pre><code>&lt;ul class="carousel" id="carousel-11-a"&gt;
+	&lt;li&gt;1&lt;/li&gt;
+	&lt;li&gt;2&lt;/li&gt;
+	&lt;li&gt;3&lt;br /&gt;Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.&lt;/li&gt;
+	&lt;li&gt;4&lt;/li&gt;
+	&lt;li&gt;5&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ul class="carousel" id="carousel-11-b"&gt;
+	&lt;li&gt;1&lt;/li&gt;
+	&lt;li&gt;2&lt;/li&gt;
+	&lt;li&gt;3&lt;br /&gt;Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.&lt;/li&gt;
+	&lt;li&gt;4&lt;/li&gt;
+	&lt;li&gt;5&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+		</div>
+
+		<div class="js">
+			<h3>JavaScript</h3>
+
+			<pre class="prettyprint"><code>$('#carousel-11-a').carousel({
+	$syncedCarousels: $('#carousel-11-b')
+});
+
+$('#carousel-11-b').carousel({
+	$syncedCarousels: $('#carousel-11-a')
 });</code></pre>
 		</div>
 

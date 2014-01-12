@@ -16,7 +16,7 @@
 				pauseAutoplayOnHover: true,
 				keyboardNav: true, // enable arrow and [p][n] keys for prev / next actions
 				groupedHandles: true, // combine handles to group if visibleSlides > 1 (e.g. "1-3", "4-6", "7")
-				fixedHeight: true  // set height based on highest slide
+				fixedHeight: true // set height based on highest slide
 			},
 			elements: {       // which navigational elements to show
 				prevNext: true,   // buttons for previous / next slide
@@ -41,7 +41,8 @@
 					distance: 0.3     // multiplied by width of slider
 				}
 			},
-			visibleSlides: 1  // how many slides to fit within visible area (0: calculate based on initial width)
+			visibleSlides: 1, // how many slides to fit within visible area (0: calculate based on initial width)
+			$syncedCarousels: null // jQuery collection of carousel elements to sync with
 		},
 
 		utils = {
@@ -121,6 +122,7 @@
 
 		// Namespace events for navigational elements (e.g. prev/next buttons)
 		events = utils.getNamespacedEvents(!support.touch ? 'click keydown' : 'touchstart'),
+		syncEvent = 'carouselUpdate',
 
 		// Detect movements if touch events are supported
 		hasMoved = false,
@@ -242,6 +244,13 @@
 					this.resize();
 				}, this), 100);
 			}, this));
+
+			// Sync with other carousels
+			if (this.settings.$syncedCarousels) {
+				this.$dom.slider.on(syncEvent, $.proxy(function(event, params) {
+					this.goTo(params.index, false, true);
+				}, this));
+			}
 
 			// Save instance to data attribute
 			$dom.slider.data(namespace, this);
@@ -447,7 +456,7 @@
 			}
 		},
 
-		goTo: function(i, skipAnimation){
+		goTo: function(i, skipAnimation, synced){
 			var self = this,
 				index = this._getValidatedTarget(i),
 				currentSlideIndex = this._getOriginalSlideIndex(index),
@@ -487,6 +496,12 @@
 						self.$dom.slider.css(prop, oldTransition);
 
 						callback();
+					});
+				}
+
+				if (this.settings.$syncedCarousels && !synced) {
+					this.settings.$syncedCarousels.trigger(syncEvent, {
+						index: index
 					});
 				}
 			} else {
@@ -879,6 +894,10 @@
 					animProps[positionProp] = refDimension + distance.x;
 
 					self.$dom.slider.css(animProps);
+
+					if (self.settings.$syncedCarousels) {
+						self.settings.$syncedCarousels.css(animProps);
+					}
 
 					hasMoved = true;
 

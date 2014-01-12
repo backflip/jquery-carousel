@@ -3,9 +3,9 @@
 <head>
 	<meta charset="utf-8" />
 	<title>jQuery Carousel Plugin</title>
-	
+
 	<meta name="viewport" content="width=device-width" />
-	
+
 	<link rel="stylesheet" href="assets/css/demo.css" />
 	<link rel="stylesheet" href="assets/css/jquery.carousel.css" />
 	<link rel="stylesheet" href="assets/google-code-prettify/prettify.css" />
@@ -18,7 +18,7 @@
 
 <div class="wrapper">
 	<h1>jQuery Carousel Plugin</h1>
-	
+
 	<div class="desc">
 		<ul>
 			<li><strong>Responsive</strong> resizing on window resize (debounced, don't worry), height adapts to content</li>
@@ -27,22 +27,22 @@
 			<li><strong>Circular mode</strong> without cloning elements (they are shifted around instead)</li>
 		</ul>
 	</div>
-	
-	
+
+
 	<h2>Initialization</h2>
-	
+
 	<ol class="examples">
 		<li>
-		
+
 <h3>Default settings</h3>
 
 <div class="example" id="example-01">
 	<div class="carousel"></div>
-	
+
 	<div class="code">
 		<div class="html">
 			<h3>HTML</h3>
-			
+
 			<pre class="prettyprint"><code>&lt;ul class="carousel" id="carousel-01"&gt;
 	&lt;li&gt;1&lt;/li&gt;
 	&lt;li&gt;2&lt;/li&gt;
@@ -54,30 +54,30 @@
 
 		<div class="js">
 			<h3>JavaScript</h3>
-			
+
 			<pre class="prettyprint"><code>$('#carousel-01').carousel();</code></pre>
 		</div>
 
 		<div class="css">
 			<h3>CSS</h3>
-			
+
 			<pre><code class="lang-css">/* Default (css/jquery.carousel.css) */</code></pre>
 		</div>
 	</div>
 </div>
-	
+
 		</li>
 		<li>
-	
+
 <h3>Custom settings as function parameter</h3>
 
 <div class="example" id="example-02">
 	<div class="carousel"></div>
-	
+
 	<div class="code">
 		<div class="html">
 			<h3>HTML</h3>
-			
+
 			<pre><code>&lt;ul class="carousel" id="carousel-02"&gt;
 	&lt;li&gt;1&lt;/li&gt;
 	&lt;li&gt;2&lt;/li&gt;
@@ -89,34 +89,34 @@
 
 		<div class="js">
 			<h3>JavaScript</h3>
-			
+
 			<pre class="prettyprint"><code>$('#carousel-02').carousel({
 	behavior: {
 		circular: true
-	}				
+	}
 });</code></pre>
 		</div>
 
 		<div class="css">
 			<h3>CSS</h3>
-			
+
 			<pre><code class="lang-css">/* Default (css/jquery.carousel.css) */</code></pre>
 		</div>
 	</div>
 </div>
-	
+
 		</li>
 		<li>
-	
+
 <h3>Custom settings as data attribute (<em>data-carousel-options</em>)</h3>
 
 <div class="example" id="example-03">
 	<div class="carousel"></div>
-	
+
 	<div class="code">
 		<div class="html">
 			<h3>HTML</h3>
-			
+
 			<pre class="prettyprint"><code>&lt;ul data-carousel-options='{"behavior":{"circular":true}}' class="carousel" id="carousel-03"&gt;
 	&lt;li&gt;1&lt;/li&gt;
 	&lt;li&gt;2&lt;/li&gt;
@@ -128,36 +128,36 @@
 
 		<div class="js">
 			<h3>JavaScript</h3>
-			
+
 			<pre><code>$('#carousel-03').carousel();</code></pre>
 		</div>
 
 		<div class="css">
 			<h3>CSS</h3>
-			
+
 			<pre><code class="lang-css">/* Default (css/jquery.carousel.css) */</code></pre>
 		</div>
 	</div>
 </div>
-	
+
 		</li>
 	</ol>
-	
-		
+
+
 	<h2>Navigational elements, behavior</h2>
-	
+
 	<ol class="examples">
 		<li>
-		
+
 <h3>Nice handles, no other navigational elements</h3>
 
 <div class="example" id="example-04">
 	<div class="carousel"></div>
-	
+
 	<div class="code">
 		<div class="html">
 			<h3>HTML</h3>
-			
+
 			<pre><code>&lt;ul class="carousel" id="carousel-04"&gt;
 	&lt;li&gt;1&lt;/li&gt;
 	&lt;li&gt;2&lt;/li&gt;
@@ -169,7 +169,7 @@
 
 		<div class="js">
 			<h3>JavaScript</h3>
-			
+
 			<pre class="prettyprint"><code>$('#carousel-04').carousel({
 	elements: {
 		prevNext: false,
@@ -180,7 +180,7 @@
 
 		<div class="css">
 			<h3>CSS</h3>
-			
+
 			<pre class="prettyprint"><code class="lang-css">.carousel-handles {
 	margin: 1em 0 0 0;
 }
@@ -215,19 +215,19 @@
 		</div>
 	</div>
 </div>
-	
+
 		</li>
 		<li>
-	
+
 <h3>Nice prev / next button, no other navigational elements</h3>
 
 <div class="example" id="example-05">
 	<div class="carousel"></div>
-	
+
 	<div class="code">
 		<div class="html">
 			<h3>HTML</h3>
-			
+
 			<pre><code>&lt;ul class="carousel" id="carousel-05"&gt;
 	&lt;li&gt;1&lt;/li&gt;
 	&lt;li&gt;2&lt;/li&gt;
@@ -239,18 +239,18 @@
 
 		<div class="js">
 			<h3>JavaScript</h3>
-			
+
 			<pre class="prettyprint"><code>$('#carousel-05').carousel({
 	elements: {
 		counter: false,
 		handles: false
-	}				
+	}
 });</code></pre>
 		</div>
 
 		<div class="css">
 			<h3>CSS</h3>
-			
+
 			<pre class="prettyprint"><code class="lang-css">.carousel-container {
 	position: relative;
 }
@@ -307,19 +307,19 @@
 		</div>
 	</div>
 </div>
-	
+
 		</li>
 		<li>
-	
+
 <h3>Vertical slider</h3>
 
 <div class="example" id="example-06">
 	<div class="carousel"></div>
-	
+
 	<div class="code">
 		<div class="html">
 			<h3>HTML</h3>
-			
+
 			<pre><code>&lt;ul class="carousel" id="carousel-06"&gt;
 	&lt;li&gt;1&lt;/li&gt;
 	&lt;li&gt;2&lt;/li&gt;
@@ -331,41 +331,41 @@
 
 		<div class="js">
 			<h3>JavaScript</h3>
-			
+
 			<pre class="prettyprint"><code>$('#carousel-06').carousel({
 	behavior: {
 		horizontal: false
 	},
-	visibleSlides: 2			
+	visibleSlides: 2
 });</code></pre>
 		</div>
 
 		<div class="css">
 			<h3>CSS</h3>
-			
+
 			<pre><code class="lang-css">/* Default (css/jquery.carousel.css) */</code></pre>
 		</div>
 	</div>
 </div>
-	
+
 		</li>
 	</ol>
-		
-	
+
+
 	<h2>Methods</h2>
-	
+
 	<ol class="examples">
 		<li>
-		
+
 <h3>Custom prev / next buttons</h3>
 
 <div class="example" id="example-07">
 	<div class="carousel"></div>
-	
+
 	<div class="code">
 		<div class="html">
 			<h3>HTML</h3>
-			
+
 			<pre><code>&lt;ul class="carousel" id="carousel-07"&gt;
 	&lt;li&gt;1&lt;/li&gt;
 	&lt;li&gt;2&lt;/li&gt;
@@ -380,7 +380,7 @@
 
 		<div class="js">
 			<h3>JavaScript</h3>
-			
+
 			<pre class="prettyprint"><code>/* Init carousel */
 $('#carousel-07').carousel({
 	elements: {
@@ -420,24 +420,24 @@ $('#next').on('click', function(){
 
 		<div class="css">
 			<h3>CSS</h3>
-			
+
 			<pre><code class="lang-css">/* Default (css/jquery.carousel.css) */</code></pre>
 		</div>
 	</div>
 </div>
-	
+
 		</li>
 		<li>
-		
+
 <h3>Update settings</h3>
 
 <div class="example" id="example-08">
 	<div class="carousel"></div>
-	
+
 	<div class="code">
 		<div class="html">
 			<h3>HTML</h3>
-			
+
 			<pre><code>&lt;ul class="carousel" id="carousel-08"&gt;
 	&lt;li&gt;1&lt;/li&gt;
 	&lt;li&gt;2&lt;/li&gt;
@@ -449,7 +449,7 @@ $('#next').on('click', function(){
 
 		<div class="js">
 			<h3>JavaScript</h3>
-			
+
 			<pre class="prettyprint"><code>/* Init carousel */
 var carousel = new Carousel($('#carousel-08'));
 carousel.init();
@@ -474,24 +474,24 @@ carousel.update({
 
 		<div class="css">
 			<h3>CSS</h3>
-			
+
 			<pre><code class="lang-css">/* Default (css/jquery.carousel.css) */</code></pre>
 		</div>
 	</div>
 </div>
-	
+
 		</li>
 		<li>
-		
+
 <h3>Destroy</h3>
 
 <div class="example" id="example-09">
 	<div class="carousel"></div>
-	
+
 	<div class="code">
 		<div class="html">
 			<h3>HTML</h3>
-			
+
 			<pre><code>&lt;ul class="carousel" id="carousel-09"&gt;
 	&lt;li&gt;1&lt;/li&gt;
 	&lt;li&gt;2&lt;/li&gt;
@@ -503,7 +503,7 @@ carousel.update({
 
 		<div class="js">
 			<h3>JavaScript</h3>
-			
+
 			<pre class="prettyprint"><code>/* Init carousel */
 var carousel = new Carousel($('#carousel-09'));
 carousel.init();
@@ -514,15 +514,15 @@ carousel.destroy();</code></pre>
 
 		<div class="css">
 			<h3>CSS</h3>
-			
+
 			<pre><code class="lang-css">/* Default (css/jquery.carousel.css) */</code></pre>
 		</div>
 	</div>
 </div>
-	
+
 		</li>
 	</ol>
-		
+
 </div>
 
 
@@ -537,35 +537,35 @@ carousel.destroy();</code></pre>
 // http://yuiblog.com/blog/2007/06/07/style/
 function addCss(cssCode) {
 	var styleElement = document.createElement("style");
-	
+
 	styleElement.type = "text/css";
-	
+
 	if (styleElement.styleSheet) {
 		styleElement.styleSheet.cssText = cssCode;
 	} else {
 		styleElement.appendChild(document.createTextNode(cssCode));
 	}
-	
+
 	document.getElementsByTagName("head")[0].appendChild(styleElement);
 }
 
 // Loop through examples and eval stuff
 $('.example').each(function(i){
 	var $this = $(this),
-		
+
 		id = $this.attr('id'),
 		idRegExp = new RegExp(' #' + id, 'g'),
-		
+
 		html = $this.find('.html code').text(),
 		js = $this.find('.js code').text(),
 		css = $this.find('.css code').text().replace(/\.carousel/g, '#' + id + ' .carousel').replace(idRegExp, '');
-	
+
 	// Add HTML
 	$this.find('.carousel').html(html);
-	
+
 	// Add style block
 	addCss(css);
-	
+
 	// Eval JS
 	setTimeout(function(){
 		eval(js);

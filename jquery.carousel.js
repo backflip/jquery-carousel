@@ -16,7 +16,9 @@
 				pauseAutoplayOnHover: true,
 				keyboardNav: true, // enable arrow and [p][n] keys for prev / next actions
 				groupedHandles: true, // combine handles to group if visibleSlides > 1 (e.g. "1-3", "4-6", "7")
-				fixedHeight: true // set height based on highest slide
+				fixedHeight: true, // set height based on highest slide
+				responsive: true,  // whether to update the dimensions on window resize (debounced)
+				resetInitialStylesOnDestroy: false // you get the idea
 			},
 			elements: {       // which navigational elements to show
 				prevNext: true,   // buttons for previous / next slide
@@ -42,8 +44,7 @@
 				}
 			},
 			visibleSlides: 1, // how many slides to fit within visible area (0: calculate based on initial width)
-			$syncedCarousels: null, // jQuery collection of carousel elements to sync with
-			resetInitialStylesOnDestroy: false // you get the idea
+			$syncedCarousels: null // jQuery collection of carousel elements to sync with
 		},
 
 		utils = {
@@ -239,15 +240,17 @@
 			this.update();
 
 			// Re-calculate dimensions on window resize
-			$(window).on(utils.getNamespacedEvents('resize') + this.index, $.proxy(function(){
-				if (resizeTimeout) {
-					clearTimeout(resizeTimeout);
-				}
+			if (this.settings.behavior.responsive) {
+				$(window).on(utils.getNamespacedEvents('resize') + this.index, $.proxy(function(){
+					if (resizeTimeout) {
+						clearTimeout(resizeTimeout);
+					}
 
-				resizeTimeout = setTimeout($.proxy(function(){
-					this.resize();
-				}, this), 100);
-			}, this));
+					resizeTimeout = setTimeout($.proxy(function(){
+						this.resize();
+					}, this), 100);
+				}, this));
+			}
 
 			// Sync with other carousels
 			if (this.settings.$syncedCarousels) {
@@ -272,8 +275,8 @@
 
 			// Update properties
 			this.props.total = this.$dom.slides.length;
-			this.props.currentDomIndex = this.settings.initialSlide;
-			this.props.currentSlideIndex = this.settings.initialSlide;
+			this.props.currentDomIndex = (this.props.currentDomIndex > this.props.total) ? this.props.total : this.props.currentDomIndex;
+			this.props.currentSlideIndex = (this.props.currentSlideIndex > this.props.total) ? this.props.total : this.props.currentDomIndex;
 			this.props.visible = this._getVisibleSlides();
 
 			// Update jQuery handle object
@@ -1034,13 +1037,16 @@
 			var minIndex = this.props.currentDomIndex,
 				maxIndex = minIndex + this.props.visible,
 				filterSelector = (minIndex > 0) ? ':gt(' + (minIndex - 1) + '):lt(' + this.props.visible + ')' : ':lt(' + (maxIndex) + ')',
+				maxHeight = this._getHighestSlide(),
 				height = this._getHighestSlide(filterSelector);
+
+			this.$dom.slides.css('min-height', maxHeight);
 
 			this.$dom.frame.animate({
 				height: height
-			}, this.settings.animation.duration);
-
-			this.$dom.slides.css('min-height', height);
+			}, this.settings.animation.duration, $.proxy(function() {
+				this.$dom.slides.css('min-height', height);
+			}, this));
 		}
 	};
 

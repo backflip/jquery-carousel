@@ -7,10 +7,10 @@ It's better than all the others, of course:
 * **Accessible** navigation elements (use your keyboard)
 * **Circular mode** without cloning elements (they are shifted around instead)
 * **Special features** like:
-*** Adapt the height based on currently visible slides: [Example](http://backflip.github.io/jquery-carousel/demo/#example-06-b)
-*** Add spacing between slides ("gutter"): [Example](http://backflip.github.io/jquery-carousel/demo/#example-06-d)
-*** Have multiple visible slides with "grouped handles": [Example](http://backflip.github.io/jquery-carousel/demo/#example-06-a)
-*** Sync multiple carousels: [Example](http://backflip.github.io/jquery-carousel/demo/#example-11-a)
+	* Adapt the height based on currently visible slides: [Example](http://backflip.github.io/jquery-carousel/demo/#example-06-b)
+	* Add spacing between slides ("gutter"): [Example](http://backflip.github.io/jquery-carousel/demo/#example-06-d)
+	* Have multiple visible slides with "grouped handles": [Example](http://backflip.github.io/jquery-carousel/demo/#example-06-a)
+	* Sync multiple carousels: [Example](http://backflip.github.io/jquery-carousel/demo/#example-11-a)
 
 Is uses Mark Dalgleish's [«Highly Configurable jQuery Plugins» pattern](http://markdalgleish.com/2011/05/creating-highly-configurable-jquery-plugins/).
 
@@ -49,7 +49,9 @@ carousel.init();
 * **update(options)**: Override current options and update carousel accordingly
 * **destroy**: Remove added DOM elements, unbind events
 
-## Default options (word of caution: some options were moved in version 1.2)
+## Default options
+
+**Warning**: Some options were moved in version 1.2.
 
 ```js
 {

@@ -300,15 +300,15 @@
 				containerHeight,
 				gutter = this.settings.layout.gutter,
 				gutterStyles = gutter ? (this.settings.layout.horizontal ? {
-						'margin-left': gutter,
-						'margin-right': gutter
+						'margin-left': 0.5 * gutter,
+						'margin-right': 0.5 * gutter
 					} : {
-						'margin-top': gutter,
-						'margin-bottom': gutter
+						'margin-top': 0.5 * gutter,
+						'margin-bottom': 0.5 * gutter
 					}) : {},
 				slidesWidth = this.settings.layout.horizontal ? Math.floor(containerWidth / this.props.visible) : containerWidth,
 				slidesHeight,
-				sliderWidth = this.settings.layout.horizontal ? this.props.total * (slidesWidth + 2* gutter) : slidesWidth;
+				sliderWidth = this.settings.layout.horizontal ? this.props.total * (slidesWidth + gutter) : slidesWidth;
 
 			// Set new dimensions of items and slider
 			this.$dom.slides.outerWidth(slidesWidth).css(gutterStyles);
@@ -320,7 +320,7 @@
 				this.$dom.slides.css('min-height', slidesHeight);
 
 				// Set container height based on slides' height
-				containerHeight = this.settings.layout.horizontal ? slidesHeight : this.props.visible * (slidesHeight + 2* gutter);
+				containerHeight = this.settings.layout.horizontal ? slidesHeight : this.props.visible * (slidesHeight + gutter);
 				this.$dom.frame.height(containerHeight);
 			}
 
@@ -770,7 +770,7 @@
 				prop = this.settings.layout.horizontal ? 'left' : 'top',
 				css = {};
 
-			css[prop] = - (index * (slidesSize + 2 * gutter) + gutter);
+			css[prop] = - (index * (slidesSize + gutter) + 0.5 * gutter);
 
 			return css;
 		},

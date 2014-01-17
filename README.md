@@ -6,18 +6,24 @@ It's better than all the others, of course:
 * **Swipe-enabled** for touch devices
 * **Accessible** navigation elements (use your keyboard)
 * **Circular mode** without cloning elements (they are shifted around instead)
+* **Special features** like:
+*** Adapt the height based on currently visible slides: [Example](http://backflip.github.io/jquery-carousel/demo/#example-06-b)
+*** Add spacing between slides ("gutter"): [Example](http://backflip.github.io/jquery-carousel/demo/#example-06-d)
+*** Have multiple visible slides with "grouped handles": [Example](http://backflip.github.io/jquery-carousel/demo/#example-06-a)
+*** Sync multiple carousels: [Example](http://backflip.github.io/jquery-carousel/demo/#example-11-a)
 
 Is uses Mark Dalgleish's [«Highly Configurable jQuery Plugins» pattern](http://markdalgleish.com/2011/05/creating-highly-configurable-jquery-plugins/).
 
-**Tested on:** IE 7-9, FF 3.6 and 11, Chrome 18, Safari 5.1.5, Opera 11.62, Mobile Safari on iOS 4 and 5.
-*Coming soon:* IE 6, default Android browser on a HTC Hero.
+**Tested on:** IE 7-10, iOS 7, current versions of Firefox, Chrome, Safari. It is highly likely to be working on older versions, too.
+
+**Word of caution**: If you don't need the features listed above, this plugin might be overkill and something like [Swipe](https://github.com/bradbirdsall/Swipe) might serve you better.
 
 ## How to use
 
 Demos: http://backflip.github.com/jquery-carousel/demo/
 
-* Include some basic styling (see below)
-* Include jQuery and the script
+* Include some basic styling (see [jquery.carousel.css](jquery.carousel.css))
+* Include jQuery (>= 1.8) and the script
 * Initialize carousel:
  
 ```js
@@ -43,123 +49,52 @@ carousel.init();
 * **update(options)**: Override current options and update carousel accordingly
 * **destroy**: Remove added DOM elements, unbind events
 
-## Default options
+## Default options (word of caution: some options were moved in version 1.2)
 
 ```js
 {
 	animation: {
-		duration: 300,    // milliseconds
-		step: 1           // number of slides per animation (might be lower than number of visible slides)
+		duration: 300, // milliseconds
+		step: 1 // number of slides per animation (might be lower than number of visible slides)
 	},
 	behavior: {
+		circular: false, // go to first slide after last one
+		autoplay: 0, // auto-advance interval (0: no autoplay)
+		pauseAutoplayOnHover: true,
+		keyboardNav: true, // enable arrow and [p][n] keys for prev / next actions
+		resetInitialStylesOnDestroy: false // you get the idea
+	},
+	layout: {
 		horizontal: true, // set to false for vertical slider
-		circular: false,  // go to first slide after last one
-		autoplay: 0,      // auto-advance interval (0: no autoplay)
-		pauseAutoplayOnHover: true, // guess what: auto-advance is paused when hovering the container
-		keyboardNav: true // enable arrow and [p][n] keys for prev / next actions
+		groupedHandles: true, // combine handles to group if visibleSlides > 1 (e.g. "1-3", "4-6", "7")
+		fixedHeight: true, // set height based on highest slide
+		responsive: true, // whether to update the dimensions on window resize (debounced)
+		visibleSlides: 1, // how many slides to fit within visible area (0: calculate based on initial width)
+		gutter: 0 // spacing between slides
 	},
-	elements: {       // which navigational elements to show
-		prevNext: true,   // buttons for previous / next slide
-		handles: true,    // button for each slide showing its index
-		counter: true     // "Slide x of y"
+	elements: { // which navigational elements to show
+		prevNext: true, // buttons for previous / next slide
+		handles: true, // button for each slide showing its index
+		counter: true // "Slide x of y"
 	},
-	events: {         // custom callbacks
-		start: false,     // function(currentSlideIndex){ … }
-		stop: false       // function(currentSlideIndex){ … }
+	events: { // custom callbacks
+		start: false, // function(targetDomIndex, targetSlideIndex){ … }
+		stop: false // function(targetDomIndex, targetSlideIndex){ … }
 	},
-	initialSlide: 0,  // which slide to show on init
-	text: {           // content of navigational elements
+	initialSlide: 0, // which slide to show on init
+	text: { // content of navigational elements
 		next:    'show next slide',
 		prev:    'show previous slide',
 		counter: '%current% of %total%',
 		handle:  '%index%'
 	},
-	touch: {          // whether to enable touch support and which criteria to use for swipe movement
+	touch: { // whether to enable touch support and which criteria to use for swipe movement
 		enabled: true,
 		thresholds: {
-			speed: 0.4,       // multiplied by width of slider per second
-			distance: 0.3     // multiplied by width of slider
+			speed: 0.4, // multiplied by width of slider per second
+			distance: 0.3 // multiplied by width of slider
 		}
 	},
-	visibleSlides: 1  // how many slides to fit within visible area (0: calculate based on initial width)
-}
-```
-
-## Basic styling
-
-```css
-.carousel-frame {
-	border: 1px solid #999;
-	overflow: hidden;
-	position: relative;
-}
-
-.carousel-slider {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	position: relative;
-	/* Trigger hardware acceleration */
-		   -moz-transform: translateZ(0);
-		    -ms-transform: translateZ(0);
-		     -o-transform: translateZ(0);
-		-webkit-transform: translateZ(0);
-	transform:             translateZ(0);
-}
-.carousel-slide {
-	float: left;
-	margin: 0;
-	padding: 0;
-}
-
-/* Prev / next navigation */
-.carousel-nav {
-	margin: 0.5em 0;
-	zoom: 1;
-}
-.carousel-nav:before,
-.carousel-nav:after {
-	content: "";
-	display: table;
-}
-.carousel-nav:after {
-	clear: both;
-}
-.carousel-nav span {
-	cursor: pointer;
-	float: left;
-}
-.carousel-nav .carousel-next {
-	float: right;
-}
-.carousel-nav .state-disabled {
-	color: #999;
-	cursor: default;
-	outline: none;
-}
-
-/* Counter ("slide x of y") */
-.carousel-counter {
-	margin: 0.5em 0;
-}
-
-/* Handles */
-.carousel-handles {
-	margin: 0.5em 0;
-	text-align: center;
-}
-.carousel-handles span {
-	cursor: pointer;
-	margin: 0 0.5em;
-}
-.carousel-handles .state-disabled {
-	color: #999;
-	cursor: default;
-	outline: none;
-}
-.carousel-handles .state-current {
-	color: #c30;
-	cursor: default;
-	outline: none;
+	$syncedCarousels: null // jQuery collection of carousel elements to sync with
 }
 ```

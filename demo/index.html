@@ -20,12 +20,30 @@
 	<h1>jQuery Carousel Plugin</h1>
 
 	<div class="desc">
+		<h2>General</h2>
+
 		<ul>
 			<li><strong>Responsive</strong> resizing on window resize (debounced, don't worry), height adapts to content</li>
 			<li><strong>Swipe-enabled</strong> for touch devices</li>
 			<li><strong>Accessible</strong> navigation elements (use your keyboard)</li>
 			<li><strong>Circular mode</strong> without cloning elements (they are shifted around instead)</li>
 		</ul>
+
+
+		<h2>Optional features</h2>
+
+		<ul>
+			<li>Adapt the height based on currently visible slides: <a href="#example-06-b">Example</a></li>
+			<li>Add spacing between slides ("gutter"): <a href="#example-06-d">Example</a></li>
+			<li>Have multiple visible slides with "grouped handles": <a href="#example-06-a">Example</a></li>
+			<li>Sync multiple carousels: <a href="#example-11-a">Example</a></li>
+		</ul>
+
+		<p>See <a href="http://github.com/backflip/jquery-carousel">GitHub repo</a> for all available options.</p>
+	</div>
+
+	<div class="warning">
+		<strong>Word of caution</strong>: If you don't need the features listed above, this plugin might be overkill and something like <a href="https://github.com/bradbirdsall/Swipe">Swipe</a> might serve you better.
 	</div>
 
 
@@ -69,7 +87,7 @@
 		</li>
 		<li>
 
-<h3>Custom settings as function parameter</h3>
+<h3>Custom settings as function parameter (example: circular mode)</h3>
 
 <div class="example" id="example-02">
 	<div class="carousel"></div>
@@ -108,7 +126,7 @@
 		</li>
 		<li>
 
-<h3>Custom settings as data attribute (<em>data-carousel-options</em>)</h3>
+<h3>Custom settings as data attribute (<em>data-carousel-options</em>) (example: circular mode)</h3>
 
 <div class="example" id="example-03">
 	<div class="carousel"></div>
@@ -144,12 +162,12 @@
 	</ol>
 
 
-	<h2>Navigational elements, behavior</h2>
+	<h2>Navigational elements, layout, behavior</h2>
 
 	<ol class="examples">
 		<li>
 
-<h3>Nice handles, no other navigational elements</h3>
+<h3>Styled handles, no other navigational elements</h3>
 
 <div class="example" id="example-04">
 	<div class="carousel"></div>
@@ -219,7 +237,7 @@
 		</li>
 		<li>
 
-<h3>Nice prev / next button, no other navigational elements</h3>
+<h3>Styled prev / next button, no other navigational elements</h3>
 
 <div class="example" id="example-05">
 	<div class="carousel"></div>
@@ -311,9 +329,9 @@
 		</li>
 		<li>
 
-<h3>Slider adapting height based on currently visible slides</h3>
+<h3>Multiple slides visible</h3>
 
-<div class="example" id="example-10">
+<div class="example" id="example-06-a">
 	<div class="carousel"></div>
 
 	<div class="code">
@@ -333,10 +351,9 @@
 			<h3>JavaScript</h3>
 
 			<pre class="prettyprint"><code>$('#carousel-06-a').carousel({
-	behavior: {
-		fixedHeight: false
-	},
-	visibleSlides: 2
+	layout: {
+		visibleSlides: 2
+	}
 });</code></pre>
 		</div>
 
@@ -351,9 +368,9 @@
 		</li>
 		<li>
 
-<h3>Vertical slider</h3>
+<h3>Slider adapting height based on currently visible slides</h3>
 
-<div class="example" id="example-06">
+<div class="example" id="example-06-b">
 	<div class="carousel"></div>
 
 	<div class="code">
@@ -373,10 +390,10 @@
 			<h3>JavaScript</h3>
 
 			<pre class="prettyprint"><code>$('#carousel-06-b').carousel({
-	behavior: {
-		horizontal: false
-	},
-	visibleSlides: 2
+	layout: {
+		visibleSlides: 2,
+		fixedHeight: false
+	}
 });</code></pre>
 		</div>
 
@@ -384,6 +401,84 @@
 			<h3>CSS</h3>
 
 			<pre><code class="lang-css">/* Default (css/jquery.carousel.css) */</code></pre>
+		</div>
+	</div>
+</div>
+
+		</li>
+		<li>
+
+<h3>Vertical slider</h3>
+
+<div class="example" id="example-06-c">
+	<div class="carousel"></div>
+
+	<div class="code">
+		<div class="html">
+			<h3>HTML</h3>
+
+			<pre><code>&lt;ul class="carousel" id="carousel-06-c"&gt;
+	&lt;li&gt;1&lt;/li&gt;
+	&lt;li&gt;2&lt;/li&gt;
+	&lt;li&gt;3&lt;br /&gt;Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.&lt;/li&gt;
+	&lt;li&gt;4&lt;/li&gt;
+	&lt;li&gt;5&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+		</div>
+
+		<div class="js">
+			<h3>JavaScript</h3>
+
+			<pre class="prettyprint"><code>$('#carousel-06-c').carousel({
+	layout: {
+		horizontal: false
+	}
+});</code></pre>
+		</div>
+
+		<div class="css">
+			<h3>CSS</h3>
+
+			<pre><code class="lang-css">/* Default (css/jquery.carousel.css) */</code></pre>
+		</div>
+	</div>
+</div>
+
+		</li>
+		<li>
+
+<h3>Spacing between slides (<em>gutter</em>)</h3>
+
+<div class="example" id="example-06-d">
+	<div class="carousel"></div>
+
+	<div class="code">
+		<div class="html">
+			<h3>HTML</h3>
+
+			<pre><code>&lt;ul class="carousel" id="carousel-06-d"&gt;
+	&lt;li&gt;1&lt;/li&gt;
+	&lt;li&gt;2&lt;/li&gt;
+	&lt;li&gt;3&lt;br /&gt;Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.&lt;/li&gt;
+	&lt;li&gt;4&lt;/li&gt;
+	&lt;li&gt;5&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+		</div>
+
+		<div class="js">
+			<h3>JavaScript</h3>
+
+			<pre class="prettyprint"><code>$('#carousel-06-d').carousel({
+	layout: {
+		gutter: 10
+	}
+});</code></pre>
+		</div>
+
+		<div class="css">
+			<h3>CSS</h3>
+
+			<pre><code class="lang-css">.carousel-slide { background: gray; }</code></pre>
 		</div>
 	</div>
 </div>
@@ -557,7 +652,9 @@ carousel.update({
 			console.log('Visible slides: ' + (i+1) + ' & ' + (i+2)); /* Slide callback */
 		}
 	},
-	visibleSlides: 2 /* Show two slides at the same time */
+	layout: {
+		visibleSlides: 2 /* Show two slides at the same time */
+	}
 });</code></pre>
 		</div>
 

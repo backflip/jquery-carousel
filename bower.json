@@ -1,6 +1,6 @@
 {
 	"name": "jquery-carousel",
-	"version": "1.1.5",
+	"version": "1.2",
 	"main": ["./jquery.carousel.js"],
 	"author": "Thomas Jaggi",
 	"dependencies": {

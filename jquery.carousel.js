@@ -6,44 +6,47 @@
 
 		defaults = { // Default settings (see examples if something's not obvious)
 			animation: {
-				duration: 300,    // milliseconds
-				step: 1           // number of slides per animation (might be lower than number of visible slides)
+				duration: 300, // milliseconds
+				step: 1 // number of slides per animation (might be lower than number of visible slides)
 			},
 			behavior: {
-				horizontal: true, // set to false for vertical slider
-				circular: false,  // go to first slide after last one
-				autoplay: 0,      // auto-advance interval (0: no autoplay)
+				circular: false, // go to first slide after last one
+				autoplay: 0, // auto-advance interval (0: no autoplay)
 				pauseAutoplayOnHover: true,
 				keyboardNav: true, // enable arrow and [p][n] keys for prev / next actions
-				groupedHandles: true, // combine handles to group if visibleSlides > 1 (e.g. "1-3", "4-6", "7")
-				fixedHeight: true, // set height based on highest slide
-				responsive: true,  // whether to update the dimensions on window resize (debounced)
 				resetInitialStylesOnDestroy: false // you get the idea
 			},
-			elements: {       // which navigational elements to show
-				prevNext: true,   // buttons for previous / next slide
-				handles: true,    // button for each slide showing its index
-				counter: true     // "Slide x of y"
+			layout: {
+				horizontal: true, // set to false for vertical slider
+				groupedHandles: true, // combine handles to group if visibleSlides > 1 (e.g. "1-3", "4-6", "7")
+				fixedHeight: true, // set height based on highest slide
+				responsive: true, // whether to update the dimensions on window resize (debounced)
+				visibleSlides: 1, // how many slides to fit within visible area (0: calculate based on initial width)
+				gutter: 0 // spacing between slides
 			},
-			events: {         // custom callbacks
-				start: false,     // function(targetDomIndex, targetSlideIndex){ … }
-				stop: false       // function(targetDomIndex, targetSlideIndex){ … }
+			elements: { // which navigational elements to show
+				prevNext: true, // buttons for previous / next slide
+				handles: true, // button for each slide showing its index
+				counter: true // "Slide x of y"
 			},
-			initialSlide: 0,  // which slide to show on init
-			text: {           // content of navigational elements
+			events: { // custom callbacks
+				start: false, // function(targetDomIndex, targetSlideIndex){ … }
+				stop: false // function(targetDomIndex, targetSlideIndex){ … }
+			},
+			initialSlide: 0, // which slide to show on init
+			text: { // content of navigational elements
 				next:    'show next slide',
 				prev:    'show previous slide',
 				counter: '%current% of %total%',
 				handle:  '%index%'
 			},
-			touch: {          // whether to enable touch support and which criteria to use for swipe movement
+			touch: { // whether to enable touch support and which criteria to use for swipe movement
 				enabled: true,
 				thresholds: {
-					speed: 0.4,       // multiplied by width of slider per second
-					distance: 0.3     // multiplied by width of slider
+					speed: 0.4, // multiplied by width of slider per second
+					distance: 0.3 // multiplied by width of slider
 				}
 			},
-			visibleSlides: 1, // how many slides to fit within visible area (0: calculate based on initial width)
 			$syncedCarousels: null // jQuery collection of carousel elements to sync with
 		},
 
@@ -127,7 +130,8 @@
 		syncEvent = 'carouselUpdate',
 
 		// Detect movements if touch events are supported
-		hasMoved = false,
+		isSwiping = false,
+		isScrolling = false,
 
 		// Number of instances
 		instances = 0;
@@ -137,7 +141,7 @@
 			this.$dom = {
 				slider:           $(elem),
 				slides:           $(elem).children(),
-				container:        $('<div class="' + namespace + '-container" tabindex="0" />'),
+				container:        $('<div class="' + namespace + '-container" />'),
 				frame:            $('<div class="' + namespace + '-frame" />'),
 				navContainer:     $('<div class="' + namespace + '-nav" aria-hidden="true" />'),
 				prev:             $('<span class="'+ namespace + '-prev" role="button" tabindex="0" />'),
@@ -233,14 +237,14 @@
 				});
 			}
 
-			if (!this.settings.behavior.horizontal) {
+			if (!this.settings.layout.horizontal) {
 				$dom.container.addClass(namespace + '-vertical');
 			}
 
 			this.update();
 
 			// Re-calculate dimensions on window resize
-			if (this.settings.behavior.responsive) {
+			if (this.settings.layout.responsive) {
 				$(window).on(utils.getNamespacedEvents('resize') + this.index, $.proxy(function(){
 					if (resizeTimeout) {
 						clearTimeout(resizeTimeout);
@@ -294,21 +298,29 @@
 		resize: function(){
 			var containerWidth = this.$dom.frame.width(),
 				containerHeight,
-				slidesWidth = this.settings.behavior.horizontal ? Math.floor(containerWidth / this.props.visible) : containerWidth,
+				gutter = this.settings.layout.gutter,
+				gutterStyles = gutter ? (this.settings.layout.horizontal ? {
+						'margin-left': gutter,
+						'margin-right': gutter
+					} : {
+						'margin-top': gutter,
+						'margin-bottom': gutter
+					}) : {},
+				slidesWidth = this.settings.layout.horizontal ? Math.floor(containerWidth / this.props.visible) : containerWidth,
 				slidesHeight,
-				sliderWidth = this.settings.behavior.horizontal ? this.props.total * slidesWidth : slidesWidth;
+				sliderWidth = this.settings.layout.horizontal ? this.props.total * (slidesWidth + 2* gutter) : slidesWidth;
 
 			// Set new dimensions of items and slider
-			this.$dom.slides.outerWidth(slidesWidth);
+			this.$dom.slides.outerWidth(slidesWidth).css(gutterStyles);
 			this.$dom.slider.width(sliderWidth).height('auto');
 
-			if (this.settings.behavior.fixedHeight) {
+			if (this.settings.layout.fixedHeight) {
 				// Get highest slide and set equal min-height for all slides
 				slidesHeight = this._getHighestSlide();
 				this.$dom.slides.css('min-height', slidesHeight);
 
 				// Set container height based on slides' height
-				containerHeight = this.settings.behavior.horizontal ? slidesHeight : this.props.visible * slidesHeight;
+				containerHeight = this.settings.layout.horizontal ? slidesHeight : this.props.visible * (slidesHeight + 2* gutter);
 				this.$dom.frame.height(containerHeight);
 			}
 
@@ -424,7 +436,7 @@
 
 			this._updateNav();
 
-			if (!this.settings.behavior.fixedHeight) {
+			if (!this.settings.layout.fixedHeight) {
 				this._updateHeight();
 			}
 		},
@@ -458,7 +470,7 @@
 
 			this._updateNav();
 
-			if (!this.settings.behavior.fixedHeight) {
+			if (!this.settings.layout.fixedHeight) {
 				this._updateHeight();
 			}
 		},
@@ -490,7 +502,7 @@
 					});
 				} else {
 					prop = support.transition;
-					transitionProp = this.settings.behavior.horizontal ? 'left' : 'top';
+					transitionProp = this.settings.layout.horizontal ? 'left' : 'top';
 					endEvent = utils.getNamespacedEvents(utils.getTransitionEndEvent());
 					oldTransition = this.$dom.slider.css(prop);
 					transition = transitionProp + ' ' + duration/1000 + 's ease-in-out';
@@ -520,7 +532,7 @@
 
 			this._updateNav();
 
-			if (!this.settings.behavior.fixedHeight) {
+			if (!this.settings.layout.fixedHeight) {
 				this._updateHeight();
 			}
 		},
@@ -607,16 +619,16 @@
 					break;
 
 				case 'touchstart':
-					hasMoved = false;
+					isSwiping = false;
 
 					$target.on('touchmove.' + namespace, function(){
-						hasMoved = true;
+						isSwiping = true;
 					});
 					$target.on('touchend.' + namespace, function(){
 						$target.off('touchmove.' + namespace);
 						$target.off('touchend.' + namespace);
 
-						if (!hasMoved) {
+						if (!isSwiping) {
 							callback();
 						}
 					});
@@ -638,7 +650,7 @@
 			var fragment = document.createDocumentFragment(),
 				slideGroups;
 
-			if (!this.settings.behavior.groupedHandles) {
+			if (!this.settings.layout.groupedHandles) {
 				for (var i = 0; i < this.props.total; i++) {
 					// var handle = document.createElement('span');
 
@@ -753,11 +765,12 @@
 
 		// Return slide position
 		_getTargetPosition: function(index){
-			var slidesSize = this.settings.behavior.horizontal ? this.$dom.slides.outerWidth() : this.$dom.slides.outerHeight(),
-				prop = this.settings.behavior.horizontal ? 'left' : 'top',
+			var slidesSize = this.settings.layout.horizontal ? this.$dom.slides.outerWidth() : this.$dom.slides.outerHeight(),
+				gutter = this.settings.layout.gutter,
+				prop = this.settings.layout.horizontal ? 'left' : 'top',
 				css = {};
 
-			css[prop] = - index * slidesSize;
+			css[prop] = - (index * (slidesSize + 2 * gutter) + gutter);
 
 			return css;
 		},
@@ -795,15 +808,15 @@
 
 		// Calculate number of visible slides if not set
 		_getVisibleSlides: function(){
-			if (this.settings.visibleSlides > 0) {
-				return this.settings.visibleSlides;
+			if (this.settings.layout.visibleSlides > 0) {
+				return this.settings.layout.visibleSlides;
 			} else {
 				var self = this,
 					minSize = 0,
-					containerSize = this.settings.behavior.horizontal ? this.$dom.frame.width() : this.$dom.frame.height();
+					containerSize = this.settings.layout.horizontal ? this.$dom.frame.width() : this.$dom.frame.height();
 
 				this.$dom.slides.each(function(){
-					var size = self.settings.behavior.horizontal ? $(this).outerWidth() : $(this).outerHeight();
+					var size = self.settings.layout.horizontal ? $(this).outerWidth() : $(this).outerHeight();
 
 					if (size > minSize) {
 						minSize = size;
@@ -820,8 +833,8 @@
 				$slides = this.$dom.slides.filter(selector);
 
 			if ($slides.length > 0) {
-				var axis = this.settings.behavior.horizontal ? 'left' : 'top',
-					slideDimension = this.settings.behavior.horizontal ? this.$dom.slides.outerWidth() : this.$dom.slides.outerHeight(),
+				var axis = this.settings.layout.horizontal ? 'left' : 'top',
+					slideDimension = this.settings.layout.horizontal ? this.$dom.slides.outerWidth() : this.$dom.slides.outerHeight(),
 					currentPosition = this.$dom.slider.position(),
 					newPosition = {};
 
@@ -871,7 +884,7 @@
 					};
 
 				// Swap coords if slider is vertical
-				if (!self.settings.behavior.horizontal) {
+				if (!self.settings.layout.horizontal) {
 					distance = {
 						x: distance.y,
 						y: distance.x
@@ -891,15 +904,20 @@
 
 				time.start = new Date().getTime();
 
-				hasMoved = false;
+				isSwiping = false;
+				isScrolling = false;
 			};
 			events['touchmove.'+namespace] = function(e) {
+				if (isScrolling && !isSwiping) {
+					return;
+				}
+
 				// TODO: Debounce
 
 				var event = e.originalEvent.targetTouches[0],
 					distance = 0,
 					animProps = {},
-					positionProp = self.settings.behavior.horizontal ? 'left' : 'top',
+					positionProp = self.settings.layout.horizontal ? 'left' : 'top',
 					refDimension;
 
 				coords.end.x = event.pageX;
@@ -907,8 +925,9 @@
 
 				distance = getDistance();
 
-				if (Math.abs(distance.x) > Math.abs(distance.y)) {
-					refDimension = self.settings.behavior.horizontal ? sliderOffset.left : sliderOffset.top;
+				// Swiping the carousel
+				if (Math.abs(distance.x) > Math.abs(distance.y) || isSwiping) {
+					refDimension = self.settings.layout.horizontal ? sliderOffset.left : sliderOffset.top;
 					animProps[positionProp] = refDimension + distance.x;
 
 					self.$dom.slider.css(animProps);
@@ -917,13 +936,16 @@
 						self.settings.$syncedCarousels.css(animProps);
 					}
 
-					hasMoved = true;
+					isSwiping = true;
 
 					e.preventDefault();
+				// "Scrolling"
+				} else {
+					isScrolling = true;
 				}
 			};
 			events['touchend.'+namespace] = function(e) {
-				if (!hasMoved) {
+				if (!isSwiping || isScrolling) {
 					return;
 				}
 
@@ -939,7 +961,7 @@
 
 					// Check if either swipe distance or speed was sufficient
 					if (Math.abs(distance.x) > thresholds.distance || speed > thresholds.speed) {
-						var refDimension = self.settings.behavior.horizontal ? self.$dom.slides.outerWidth() : self.$dom.slides.outerHeight(),
+						var refDimension = self.settings.layout.horizontal ? self.$dom.slides.outerWidth() : self.$dom.slides.outerHeight(),
 							swipeDir = (distance.x > 0) ? -1 : 1,
 							slidesSwiped = Math.abs(Math.round(distance.x / refDimension));
 
@@ -994,7 +1016,7 @@
 					var currentIndex = this._getOriginalSlideIndex(this.props.currentDomIndex),
 						currentHandles = (currentIndex > 0) ? ':gt(' + (currentIndex - 1) + '):lt(' + this.props.visible + ')' : ':lt(' + (currentIndex + this.props.visible) + ')';
 
-					if (this.settings.behavior.groupedHandles) {
+					if (this.settings.layout.groupedHandles) {
 						currentHandles = ':eq(' + Math.ceil(currentIndex/this.props.visible) + ')';
 					}
 

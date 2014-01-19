@@ -1,4 +1,7 @@
-.carousel-frame {
+.carousel.is-initialized {
+  position: relative; }
+
+.is-initialized .carousel-frame {
   overflow: hidden;
   position: relative; }
 
@@ -6,40 +9,47 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  position: relative;
-  /* Trigger hardware acceleration */
-  -moz-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  -o-transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  width: 100%; }
+  position: relative; }
+  .is-initialized .carousel-slider {
+    /* Use GPU */
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0); }
 
 .carousel-slide {
-  float: left;
   margin: 0;
   padding: 0; }
+  .is-initialized .carousel-slide {
+    float: left;
+    width: 100%; }
 
 /* Prev / next navigation */
-.carousel-nav {
+.carousel-navs {
   margin: 0.5em 0;
-  zoom: 1; }
-  .carousel-nav:before, .carousel-nav:after {
-    content: "";
+  *zoom: 1; }
+  .carousel-navs:before, .carousel-navs:after {
+    content: " ";
     display: table; }
-  .carousel-nav:after {
+  .carousel-navs:after {
     clear: both; }
-  .carousel-nav span {
-    color: #333333;
-    cursor: pointer;
+
+.carousel-nav {
+  background: none;
+  border: none;
+  color: black;
+  cursor: pointer;
+  float: right;
+  font-size: 1em;
+  padding: 0; }
+  .carousel-nav:first-child {
     float: left; }
-    .carousel-nav span:hover, .carousel-nav span:focus, .carousel-nav span:active, .carousel-nav span.state-disabled {
-      color: #cc3300; }
-    .carousel-nav span.carousel-next {
-      float: right; }
-    .carousel-nav span.state-disabled {
-      cursor: default;
-      outline: none; }
+  .carousel-nav:hover, .carousel-nav:focus, .carousel-nav:active {
+    color: #cc3300; }
+  .carousel-nav[disabled] {
+    color: #999999;
+    cursor: default; }
 
 /* Counter ("slide x of y") */
 .carousel-counter {
@@ -49,16 +59,20 @@
 .carousel-handles {
   margin: 0.5em 0;
   text-align: center; }
-  .carousel-handles span {
-    color: #333333;
-    cursor: pointer;
-    margin: 0 0.5em; }
-    .carousel-handles span:hover, .carousel-handles span:focus, .carousel-handles span:active, .carousel-handles span.state-current {
-      color: #cc3300; }
-    .carousel-handles span.state-disabled {
-      color: #999999;
-      cursor: default;
-      outline: none; }
-    .carousel-handles span.state-current {
-      cursor: default;
-      outline: none; }
+
+.carousel-handle {
+  background: none;
+  border: none;
+  color: black;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 1em;
+  margin: 0 0.5em;
+  padding: 0; }
+  .carousel-handle:hover, .carousel-handle:focus, .carousel-handle:active, .carousel-handle.is-active {
+    color: #cc3300; }
+  .carousel-handle.is-active {
+    cursor: default; }
+  .carousel-handle[disabled] {
+    color: #999999;
+    cursor: default; }

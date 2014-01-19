@@ -1,10 +1,21 @@
-$carouselNavColor:         #333 !default;
-$carouselNavColorActive:   #c30 !default;
-$carouselNavColorDisabled: #999 !default;
+$colorDefault: #000 !default;
+$colorActive: #c30 !default;
+$colorDisabled: #999 !default;
+
+
+.carousel {
+
+	&.is-initialized {
+		position: relative;
+	}
+}
 
 .carousel-frame {
-	overflow: hidden;
-	position: relative;
+
+	.is-initialized & {
+		overflow: hidden;
+		position: relative;
+	}
 }
 
 .carousel-slider {
@@ -12,53 +23,62 @@ $carouselNavColorDisabled: #999 !default;
 	margin: 0;
 	padding: 0;
 	position: relative;
-	/* Trigger hardware acceleration */
-		   -moz-transform: translateZ(0);
-		    -ms-transform: translateZ(0);
-		     -o-transform: translateZ(0);
-		-webkit-transform: translateZ(0);
-	transform:             translateZ(0);
-	width: 100%;
+
+	.is-initialized & {
+		/* Use GPU */
+			   -moz-transform: translateZ(0);
+			    -ms-transform: translateZ(0);
+			     -o-transform: translateZ(0);
+			-webkit-transform: translateZ(0);
+		transform:             translateZ(0);
+	}
 }
 .carousel-slide {
-	float: left;
 	margin: 0;
 	padding: 0;
+
+	.is-initialized & {
+		float: left;
+		width: 100%;
+	}
 }
 
 /* Prev / next navigation */
-.carousel-nav {
+.carousel-navs {
 	margin: 0.5em 0;
-	zoom: 1;
+	*zoom: 1;
 
 	&:before,
 	&:after {
-		content: "";
+		content: " ";
 		display: table;
 	}
 	&:after {
 		clear: both;
 	}
+}
+.carousel-nav {
+	background: none;
+	border: none;
+	color: $colorDefault;
+	cursor: pointer;
+	float: right;
+	font-size: 1em;
+	padding: 0;
 
-	span {
-		color: $carouselNavColor;
-		cursor: pointer;
+	&:first-child {
 		float: left;
+	}
 
-		&:hover,
-		&:focus,
-		&:active,
-		&.state-disabled {
-			color: $carouselNavColorActive;
-		}
+	&:hover,
+	&:focus,
+	&:active {
+		color: $colorActive;
+	}
 
-		&.carousel-next {
-			float: right;
-		}
-		&.state-disabled {
-			cursor: default;
-			outline: none;
-		}
+	&[disabled] {
+		color: $colorDisabled;
+		cursor: default;
 	}
 }
 
@@ -71,27 +91,30 @@ $carouselNavColorDisabled: #999 !default;
 .carousel-handles {
 	margin: 0.5em 0;
 	text-align: center;
+}
+.carousel-handle {
+	background: none;
+	border: none;
+	color: $colorDefault;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 1em;
+	margin: 0 0.5em;
+	padding: 0;
 
-	span {
-		color: $carouselNavColor;
-		cursor: pointer;
-		margin: 0 0.5em;
+	&:hover,
+	&:focus,
+	&:active,
+	&.is-active {
+		color: $colorActive;
+	}
 
-		&:hover,
-		&:focus,
-		&:active,
-		&.state-current {
-			color: $carouselNavColorActive;
-		}
+	&.is-active {
+		cursor: default;
+	}
 
-		&.state-disabled {
-			color: $carouselNavColorDisabled;
-			cursor: default;
-			outline: none;
-		}
-		&.state-current {
-			cursor: default;
-			outline: none;
-		}
+	&[disabled] {
+		color: $colorDisabled;
+		cursor: default;
 	}
 }

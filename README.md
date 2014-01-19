@@ -22,6 +22,22 @@ Is uses Mark Dalgleish's [«Highly Configurable jQuery Plugins» pattern](http:/
 
 Demos: http://backflip.github.com/jquery-carousel/demo/
 
+Basic markup (the node type doesn't matter, the elements are identified by class name):
+
+```html
+<div class="carousel" id="carousel">
+	<div class="carousel-frame">
+		<ul class="carousel-slider">
+			<li class="carousel-slide">1</li>
+			<li class="carousel-slide">2</li>
+			<li class="carousel-slide">3</li>
+		</ul>
+	</div>
+
+	<!-- Note: this is where navigational elements will be inserted if specified -->
+</div>
+```
+
 * Include some basic styling (see [jquery.carousel.css](jquery.carousel.css))
 * Include jQuery (>= 1.8) and the script
 * Initialize carousel:
@@ -55,16 +71,35 @@ carousel.init();
 
 ```js
 {
+	domSelectors: {
+		frame: '.' + namespace + '-frame',
+		slider: '.' + namespace + '-slider',
+		slides: '.' + namespace + '-slide'
+	},
+	templates: {
+		navContainer: '<div class="' + namespace + '-navs" aria-hidden="true" role="presentation" />',
+		navItemPrev: '<button class="' + namespace + '-nav" role="presentation">Show previous slide</button>',
+		navItemNext: '<button class="' + namespace + '-nav" role="presentation">Show next slide</button>',
+		counter: '<div class="' + namespace + '-counter" aria-hidden="true" role="presentation">%current% of %total%</div>',
+		handleContainer: '<div class="' + namespace + '-handles" aria-hidden="true" role="presentation" />',
+		handleItem: '<button class="' + namespace + '-handle" role="presentation">Slide %index%</div>'
+	},
+	stateClasses: {
+		isInitialized: 'is-initialized',
+		isEnabled: 'is-enabled',
+		isDisabled: 'is-disabled',
+		isActive: 'is-active'
+	},
 	animation: {
 		duration: 300, // milliseconds
-		step: 1 // number of slides per animation (might be lower than number of visible slides)
+		step: 1, // number of slides per animation (might be lower than number of visible slides)
+		easing: 'ease-in-out'
 	},
 	behavior: {
 		circular: false, // go to first slide after last one
 		autoplay: 0, // auto-advance interval (0: no autoplay)
 		pauseAutoplayOnHover: true,
-		keyboardNav: true, // enable arrow and [p][n] keys for prev / next actions
-		resetInitialStylesOnDestroy: false // you get the idea
+		keyboardNav: true // enable arrow and [p][n] keys for prev / next actions
 	},
 	layout: {
 		horizontal: true, // set to false for vertical slider
@@ -80,16 +115,10 @@ carousel.init();
 		counter: true // "Slide x of y"
 	},
 	events: { // custom callbacks
-		start: false, // function(targetDomIndex, targetSlideIndex){ … }
-		stop: false // function(targetDomIndex, targetSlideIndex){ … }
+		start: false, // function(targetDomIndex, targetSlideIndex) { … }
+		stop: false // function(targetDomIndex, targetSlideIndex) { … }
 	},
 	initialSlide: 0, // which slide to show on init
-	text: { // content of navigational elements
-		next:    'show next slide',
-		prev:    'show previous slide',
-		counter: '%current% of %total%',
-		handle:  '%index%'
-	},
 	touch: { // whether to enable touch support and which criteria to use for swipe movement
 		enabled: true,
 		thresholds: {

@@ -545,9 +545,9 @@
 			this.$dom.slider.removeAttr('style');
 			this.$dom.slides.removeAttr('style');
 
-			this.$dom.navContainer.remove();
-			this.$dom.handleContainer.remove();
-			this.$dom.counter.remove();
+			this.$dom.navContainer && this.$dom.navContainer.remove();
+			this.$dom.handleContainer && this.$dom.handleContainer.remove();
+			this.$dom.counter && this.$dom.counter.remove();
 
 			this.state.enabled = false;
 			this.props.currentDomIndex = 0;

@@ -1,6 +1,6 @@
-$colorDefault: #000 !default;
-$colorActive: #c30 !default;
-$colorDisabled: #999 !default;
+$carouselColorDefault: #000 !default;
+$carouselColorActive: #c30 !default;
+$carouselColorDisabled: #999 !default;
 
 
 .carousel {
@@ -19,12 +19,12 @@ $colorDisabled: #999 !default;
 }
 
 .carousel-slider {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	position: relative;
 
 	.is-initialized & {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		position: relative;
 		/* Use GPU */
 			   -moz-transform: translateZ(0);
 			    -ms-transform: translateZ(0);
@@ -33,12 +33,13 @@ $colorDisabled: #999 !default;
 		transform:             translateZ(0);
 	}
 }
+
 .carousel-slide {
-	margin: 0;
-	padding: 0;
 
 	.is-initialized & {
 		float: left;
+		margin: 0;
+		padding: 0;
 		width: 100%;
 	}
 }
@@ -60,7 +61,7 @@ $colorDisabled: #999 !default;
 .carousel-nav {
 	background: none;
 	border: none;
-	color: $colorDefault;
+	color: $carouselColorDefault;
 	cursor: pointer;
 	float: right;
 	font-size: 1em;
@@ -73,11 +74,11 @@ $colorDisabled: #999 !default;
 	&:hover,
 	&:focus,
 	&:active {
-		color: $colorActive;
+		color: $carouselColorActive;
 	}
 
 	&[disabled] {
-		color: $colorDisabled;
+		color: $carouselColorDisabled;
 		cursor: default;
 	}
 }
@@ -95,7 +96,7 @@ $colorDisabled: #999 !default;
 .carousel-handle {
 	background: none;
 	border: none;
-	color: $colorDefault;
+	color: $carouselColorDefault;
 	cursor: pointer;
 	display: inline-block;
 	font-size: 1em;
@@ -106,7 +107,7 @@ $colorDisabled: #999 !default;
 	&:focus,
 	&:active,
 	&.is-active {
-		color: $colorActive;
+		color: $carouselColorActive;
 	}
 
 	&.is-active {
@@ -114,7 +115,7 @@ $colorDisabled: #999 !default;
 	}
 
 	&[disabled] {
-		color: $colorDisabled;
+		color: $carouselColorDisabled;
 		cursor: default;
 	}
 }

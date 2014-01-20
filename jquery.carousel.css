@@ -5,25 +5,23 @@
   overflow: hidden;
   position: relative; }
 
-.carousel-slider {
+.is-initialized .carousel-slider {
   list-style: none;
   margin: 0;
   padding: 0;
-  position: relative; }
-  .is-initialized .carousel-slider {
-    /* Use GPU */
-    -moz-transform: translateZ(0);
-    -ms-transform: translateZ(0);
-    -o-transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0); }
+  position: relative;
+  /* Use GPU */
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0); }
 
-.carousel-slide {
+.is-initialized .carousel-slide {
+  float: left;
   margin: 0;
-  padding: 0; }
-  .is-initialized .carousel-slide {
-    float: left;
-    width: 100%; }
+  padding: 0;
+  width: 100%; }
 
 /* Prev / next navigation */
 .carousel-navs {

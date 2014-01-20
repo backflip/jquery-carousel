@@ -23,7 +23,7 @@
 				navItemNext: '<button class="' + namespace + '-nav" role="presentation">Show next slide</button>',
 				counter: '<div class="' + namespace + '-counter" aria-hidden="true" role="presentation">%current% of %total%</div>',
 				handleContainer: '<div class="' + namespace + '-handles" aria-hidden="true" role="presentation" />',
-				handleItem: '<button class="' + namespace + '-handle" role="presentation">Slide %index%</div>'
+				handleItem: '<button class="' + namespace + '-handle" role="presentation">%index%</div>'
 			},
 			stateClasses: {
 				isInitialized: 'is-initialized',
@@ -263,13 +263,6 @@
 				}, this));
 			}
 
-			// Sync with other carousels
-			if (this.settings.$syncedCarousels) {
-				this.$dom.container.on(utils.getNamespacedEvents(syncEvent), $.proxy(function(event, params) {
-					this.goTo(params.index, false, true);
-				}, this));
-			}
-
 			// Save instance to data attribute
 			$dom.container.data(namespace, this);
 
@@ -416,7 +409,9 @@
 					setTimeout(function() {
 						self.$dom.frame.scrollLeft(scrollLeft);
 
-						self.goTo(index);
+						if (index > self.props.currentSlideIndex && index < (self.props.currentSlideIndex + self.props.visibleSlides)) {
+							self.goTo(index);
+						}
 					}, 0);
 				});
 			});
@@ -444,6 +439,13 @@
 
 			if (!this.settings.layout.fixedHeight) {
 				this._updateHeight();
+			}
+
+			// Sync with other carousels
+			if (this.settings.$syncedCarousels) {
+				this.$dom.container.on(utils.getNamespacedEvents(syncEvent), $.proxy(function(event, params) {
+					this.goTo(params.index, false, true);
+				}, this));
 			}
 		},
 
@@ -986,12 +988,17 @@
 
 		// Update slider based on currently visible slides
 		// TODO: called twice on init
-		_updateHeight: function() {
+		_updateHeight: function(targetHeight) {
 			var minIndex = this.props.currentDomIndex,
 				maxIndex = minIndex + this.props.visible,
 				filterSelector = (minIndex > 0) ? ':gt(' + (minIndex - 1) + '):lt(' + this.props.visible + ')' : ':lt(' + (maxIndex) + ')',
 				maxHeight = this._getHighestSlide(),
 				height = this._getHighestSlide(filterSelector);
+
+			if (targetHeight) {
+				height = targetHeight;
+				maxHeight = '100em';
+			}
 
 			this.$dom.slides.css('min-height', maxHeight);
 

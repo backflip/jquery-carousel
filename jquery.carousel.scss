@@ -23,6 +23,7 @@ $carouselColorDisabled: #999 !default;
 	.is-initialized & {
 		list-style: none;
 		margin: 0;
+		overflow: hidden;
 		padding: 0;
 		position: relative;
 		/* Use GPU */

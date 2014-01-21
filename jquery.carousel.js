@@ -988,16 +988,16 @@
 
 		// Update slider based on currently visible slides
 		// TODO: called twice on init
-		_updateHeight: function(targetHeight) {
+		_updateHeight: function() {
 			var minIndex = this.props.currentDomIndex,
 				maxIndex = minIndex + this.props.visible,
 				filterSelector = (minIndex > 0) ? ':gt(' + (minIndex - 1) + '):lt(' + this.props.visible + ')' : ':lt(' + (maxIndex) + ')',
 				maxHeight = this._getHighestSlide(),
+				currentFrameHeight = this.$dom.frame.height(),
 				height = this._getHighestSlide(filterSelector);
 
-			if (targetHeight) {
-				height = targetHeight;
-				maxHeight = '100em';
+			if (maxHeight < currentFrameHeight) {
+				maxHeight = currentFrameHeight;
 			}
 
 			this.$dom.slides.css('min-height', maxHeight);

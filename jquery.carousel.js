@@ -710,7 +710,7 @@
 
 		// Return target slide index (calls _shiftSlides() if necessary)
 		_getValidatedTarget: function(i) {
-			if (this.props.total < this.props.visible) {
+			if (this.props.total <= this.props.visible) {
 				i = 0;
 			} else if (!this.settings.behavior.circular) {
 				// Too far left / top

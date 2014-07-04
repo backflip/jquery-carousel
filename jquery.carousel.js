@@ -470,6 +470,8 @@
 		},
 
 		goTo: function(i, skipAnimation, synced) {
+			if (this.state.animating) return;
+
 			var self = this,
 				index = this._getValidatedTarget(i),
 				originalIndex = this._getOriginalSlideIndex(index),
@@ -480,12 +482,17 @@
 					if (self.settings.events.stop) {
 						self.settings.events.stop(index, originalIndex);
 					}
+
+					self._touchEnable();
+
 					self.state.animating = false;
 				},
 				prop, transitionProp, endEvent, transition, oldTransition;
 
 			if (!skipAnimation) {
 				this.state.animating = true;
+
+				self._touchDisable();
 
 				if (this.settings.events.start) {
 					this.settings.events.start(index, originalIndex);
